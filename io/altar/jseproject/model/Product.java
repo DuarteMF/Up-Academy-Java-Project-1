@@ -1,11 +1,11 @@
 package io.altar.jseproject.model;
 
 public class Product {
-	int id;
-	// int [] shelfIdLocation;
-	float discount;
-	float tax;
-	float salePrice;
+	private int id;
+	// private int [] shelfIdLocation;
+	private float discount;
+	private float tax;
+	private float salePrice;
 	
 	public void setId(int id){
 		this.id = id;
