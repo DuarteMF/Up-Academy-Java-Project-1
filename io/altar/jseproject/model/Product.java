@@ -46,4 +46,11 @@ public class Product {
 	public void getSalePrice(){
 		System.out.println(this.salePrice);
 	}
+	
+	public Product(int id, float discount, float tax, float salePrice){
+		this.id = id;
+		this.discount = discount;
+		this.tax = tax;
+		this.salePrice = salePrice;
+	}
 }
