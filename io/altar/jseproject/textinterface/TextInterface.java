@@ -1,11 +1,13 @@
 package io.altar.jseproject.textinterface;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
 import io.altar.jseproject.model.Product;
 
 public class TextInterface {
 	private static int productNumber = 0;
-	// private static Product[] productListArray;
+	 private static ArrayList<Product> productList = new ArrayList<Product>();
 
 	public static void firstScreen() {
 		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Listar produtos\n"
@@ -30,7 +32,19 @@ public class TextInterface {
 	}
 
 	public static void listProductScreen() {
-		// List Products
+		if(!productList.isEmpty()){
+			// List Products
+			for(Product product: productList){
+//				System.out.println("ID: " + products.getId() + ", Shelves: " + ", Discount: " + products.getDiscount() + ", Tax: " + products.getTax() + ", Sale Price: " + products.getSalePrice() + "\n");
+//				products.getId();
+//				products.getDiscount();
+//				products.getTax();
+//				products.getSalePrice();
+				System.out.println(product.toString());
+			}
+		}
+		
+		
 		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Criar novo produto\n"
 				+ "2)	Editar um produto existente\n" + "3)	Consultar o detalhe de um produto\n"
 				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior");
@@ -92,44 +106,6 @@ public class TextInterface {
 		System.exit(0);
 	}
 
-	public static void createProduct() {
-		productNumber++;
-		Product newProduct = new Product();
-		newProduct.setId(productNumber);
-		try (Scanner scanner = new Scanner(System.in)) {
-
-			System.out.println(
-					"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):\n");
-			String shelfString = scanner.nextLine();
-			String[] shelfArray = shelfString.split(",\\s*"); // using regex,
-																// ,\\s* means
-																// it will split
-																// the string by
-																// a comma
-																// followed by
-																// nothing or
-																// whitespace
-			// I need to convert the above string array into an integer one;
-
-			System.out.println("Por favor indique o valor unitário de desconto:\n");
-			String discount = scanner.nextLine();
-			newProduct.setDiscount(Float.parseFloat(discount));
-
-			System.out.println("Por favor indique o Imposto de Valor Acrescentado, em percentagem:\n");
-			String valueAddedTax = scanner.nextLine();
-			newProduct.setTax(Float.parseFloat(valueAddedTax));
-
-			System.out.println("Por favor indique o Preço de Venda ao Público:\n");
-			String salePrice = scanner.nextLine();
-			newProduct.setSalePrice(Float.parseFloat(salePrice));
-
-			// Product newProduct = new Product(productNumber,
-			// Float.parseFloat(discount), Float.parseFloat(valueAddedTax),
-			// Float.parseFloat(salePrice));
-		}
-		// productListArray[productNumber-1] = newProduct;
-	}
-
 	public static int validateOption(int min, int max, Scanner scanner) {
 		int inputValue = 0;
 		while (true) {
@@ -141,6 +117,40 @@ public class TextInterface {
 			}
 			System.out.println("Por favor escolha uma opção válida!");
 			scanner.next();
+		}
+	}
+	
+	public static void createProduct() {
+		productNumber++;
+		Product newProduct = new Product();
+		newProduct.setId(productNumber);
+		try (Scanner scanner = new Scanner(System.in)) {
+
+			System.out.println(
+					"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
+			String shelfString = scanner.nextLine();
+			String[] shelfArray = shelfString.split(",\\s*"); // using regex, \\s* means it will split the string by a comma followed by nothing or whitespace
+			// I need to convert the above string array into an integer one;
+
+			System.out.println("Por favor indique o valor unitário de desconto:");
+			String discount = scanner.nextLine();
+			newProduct.setDiscount(Float.parseFloat(discount));
+
+			System.out.println("Por favor indique o Imposto de Valor Acrescentado, em percentagem:");
+			String valueAddedTax = scanner.nextLine();
+			newProduct.setTax(Float.parseFloat(valueAddedTax));
+
+			System.out.println("Por favor indique o Preço de Venda ao Público:");
+			String salePrice = scanner.nextLine();
+			newProduct.setSalePrice(Float.parseFloat(salePrice));
+
+			// Product newProduct = new Product(productNumber,
+			// Float.parseFloat(discount), Float.parseFloat(valueAddedTax),
+			// Float.parseFloat(salePrice));
+			
+			productList.add(newProduct);
+			
+			listProductScreen();
 		}
 	}
 }

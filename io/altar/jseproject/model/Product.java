@@ -5,8 +5,8 @@ public class Product {
 	// private int [] shelfIdLocation;
 	private float discount;
 	private float tax;
-	private float salePrice;
-	
+	private float salePrice;	
+
 	public void setId(int id){
 		this.id = id;
 	}
@@ -57,4 +57,10 @@ public class Product {
 	public Product(){
 		
 	}
+	
+	@Override
+	public String toString(){
+		return "ID: " + id + ", Shelves: " + ", Discount: " + discount + ", Tax: " + tax + ", Sale Price: " + salePrice + "\n";
+	}
+	
 }
