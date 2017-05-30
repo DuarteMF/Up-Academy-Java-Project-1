@@ -27,16 +27,16 @@ public class Product {
 		this.salePrice = salePrice;
 	}
 	
-	public void getId(){
-		System.out.println(this.id);		
+	public int getId(){
+		return this.id;		
 	}
 	
 	/*public void getShelfIdLocation(){
 		System.out.println(this.shelfIdLocation);
 	}*/
 	
-	public void getDiscount(){
-		System.out.println(this.discount);
+	public float getDiscount(){
+		return this.discount;
 	}
 	
 	public void getTax(){

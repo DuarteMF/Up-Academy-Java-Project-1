@@ -1,6 +1,7 @@
 package io.altar.jseproject.textinterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
@@ -32,16 +33,13 @@ public class TextInterface {
 	}
 
 	public static void listProductScreen() {
+			System.out.println("Lista de produtos:");
 		if(!productList.isEmpty()){
-			// List Products
 			for(Product product: productList){
-//				System.out.println("ID: " + products.getId() + ", Shelves: " + ", Discount: " + products.getDiscount() + ", Tax: " + products.getTax() + ", Sale Price: " + products.getSalePrice() + "\n");
-//				products.getId();
-//				products.getDiscount();
-//				products.getTax();
-//				products.getSalePrice();
 				System.out.println(product.toString());
 			}
+		}else{
+			System.out.println("Vazia!");
 		}
 		
 		
@@ -57,6 +55,7 @@ public class TextInterface {
 				break;
 
 			case 2:
+				alterProduct();
 				break;
 
 			case 3:
@@ -126,8 +125,7 @@ public class TextInterface {
 		newProduct.setId(productNumber);
 		try (Scanner scanner = new Scanner(System.in)) {
 
-			System.out.println(
-					"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
+			System.out.println("Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
 			String shelfString = scanner.nextLine();
 			String[] shelfArray = shelfString.split(",\\s*"); // using regex, \\s* means it will split the string by a comma followed by nothing or whitespace
 			// I need to convert the above string array into an integer one;
@@ -152,5 +150,41 @@ public class TextInterface {
 			
 			listProductScreen();
 		}
+	}
+	
+	public static void alterProduct(){
+		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.println("Por favor indique a ID do produto a alterar:");
+			
+			int productIndex = -1;
+			boolean idExists = false;
+			while(!idExists){
+				int productID = validateOption(1,productList.size(),scanner);
+				// System.out.println(productID);
+				for(Product product: productList){
+					if(productID == product.getId()){
+						productIndex = productList.indexOf(product);
+						// System.out.println("ID exists");
+						idExists = true;
+						break;
+					}
+				}
+			}
+			
+			Product currentProduct = productList.get(productIndex);
+			
+			System.out.println("Este produto existe nas seguintes prateleiras: ");
+			
+			System.out.println("Este produto tem o seguinte desconto: " + currentProduct.getDiscount() + "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):\n");
+			System.out.println(1);
+			String newDiscount = scanner.nextLine();
+			System.out.println(2);
+			if(!newDiscount.equals("")){
+				currentProduct.setDiscount(Float.parseFloat(newDiscount));
+			}
+			
+			
+		}
+		
 	}
 }
