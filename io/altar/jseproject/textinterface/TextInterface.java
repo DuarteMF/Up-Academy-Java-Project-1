@@ -102,7 +102,7 @@ public class TextInterface {
 
 
 	public static void leave() {
-		System.exit(0);
+		return;
 	}
 
 	public static int validateOption(int min, int max, Scanner scanner) {
