@@ -1,5 +1,6 @@
 package io.altar.jseproject.textinterface;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -46,7 +47,7 @@ public class TextInterface {
 				+ "2)	Editar um produto existente\n" + "3)	Consultar o detalhe de um produto\n"
 				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior");
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 6, scanner);
+			Integer input = validateOption(1, 5, scanner);
 
 			switch (input) {
 			case 1:
@@ -114,9 +115,6 @@ public class TextInterface {
 				if ((inputValue >= min && inputValue <= max)) {
 					return inputValue;
 				}else{
-					System.out.println(inputValue >= min);
-					System.out.println(max);
-					System.out.println(inputValue <= max);
 					System.out.println("Por favor escolha uma opção válida!");
 				}
 			}catch(Exception e){
@@ -174,25 +172,14 @@ public class TextInterface {
 	public static Integer validateID(Scanner scanner){
 		Integer productID = null;
 		while (true) {
-			productID = validateOption(1, productList.size(), scanner);
+			productID = validateOption(1, Collections.max(productList.keySet()), scanner);
 			if (productList.containsKey(productID)) {
 				return productID;
+			}else{
+				System.out.println("Por favor escolha uma opção válida!");
 			}
 		}
 	}
-//	public static boolean validateYesNo(Scanner scanner){
-//		while(true){
-//			String stored = scanner.nextLine();
-//			if(stored.equals("s")){
-//				return true;
-//			}else if(stored.equals("n")){
-//				return false;
-//			}else{
-//				System.out.println("Por favor prima s ou n");
-//			}
-//		}
-//		
-//	}
 
 	public static void createProduct() {
 		productNumber++;
@@ -229,21 +216,21 @@ public class TextInterface {
 			System.out.println("Este produto existe nas seguintes prateleiras: ");
 
 			System.out.println("Este produto tem o seguinte desconto: " + productList.get(productID).getDiscount()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):\n");
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
 			Integer newDiscount = validateInt(scanner, true);
 			if (newDiscount == null) {
 				newDiscount = productList.get(productID).getDiscount();
 			}
 
 			System.out.println("Este produto tem o seguinte imposto: " + productList.get(productID).getTax()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):\n");
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
 			Integer newTax = validateInt(scanner, true);
 			if (newTax == null) {
 				newTax = productList.get(productID).getTax();
 			}
 
 			System.out.println("Este produto tem o seguinte preço: " + productList.get(productID).getSalePrice()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):\n");
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
 			Double newSalePrice = validateDouble(scanner, true);
 			if (newSalePrice == null) {
 				newSalePrice = productList.get(productID).getSalePrice();
@@ -270,22 +257,8 @@ public class TextInterface {
 
 	public static void removeProduct() {
 		try (Scanner scanner = new Scanner(System.in)) {
-//			boolean remove = false;
-//			Integer productID = null;
-//			while(!remove){
-//				System.out.println("Por favor indique a ID do produto a remover:");
-//				productID = validateID(scanner);
-//				
-//				System.out.println("Este é o produto que escolheu:");
-//				System.out.println(productList.get(productID).toString());
-//				System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
-//				
-//				remove = validateYesNo(scanner);
-//			}
-//			
-//			ProductRepository.removeElement(productID);
-//			listProductScreen();
-			
+
+			System.out.println("Por favor indique a ID do produto a remover:");
 			Integer productID = validateID(scanner);
 			
 			System.out.println("Este é o produto que escolheu:");
