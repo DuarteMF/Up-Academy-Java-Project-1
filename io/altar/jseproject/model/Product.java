@@ -3,13 +3,13 @@ package io.altar.jseproject.model;
 import io.altar.jseproject.repository.ProductRepository;
 
 public class Product {
-	private int id;
+	private Integer id;
 	// private int [] shelfIdLocation;
-	private double discount;
-	private int tax;
-	private double salePrice;	
+	private Integer discount;
+	private Integer tax;
+	private Double salePrice;	
 
-	public void setId(int id){
+	public void setId(Integer id){
 		this.id = id;
 	}
 	
@@ -17,19 +17,19 @@ public class Product {
 		this.shelfIdLocation = shelfIdLocation;
 	}*/
 	
-	public void setDiscount(double discount){
+	public void setDiscount(Integer discount){
 		this.discount = discount;
 	}
 	
-	public void setTax(int tax){
+	public void setTax(Integer tax){
 		this.tax = tax;
 	}
 	
-	public void setSalePrice(double salePrice){
+	public void setSalePrice(Double salePrice){
 		this.salePrice = salePrice;
 	}
 	
-	public int getId(){
+	public Integer getId(){
 		return this.id;		
 	}
 	
@@ -37,19 +37,19 @@ public class Product {
 		System.out.println(this.shelfIdLocation);
 	}*/
 	
-	public double getDiscount(){
+	public Integer getDiscount(){
 		return this.discount;
 	}
 	
-	public int getTax(){
+	public Integer getTax(){
 		return this.tax;
 	}
 	
-	public double getSalePrice(){
+	public Double getSalePrice(){
 		return this.salePrice;
 	}
 	
-	public Product(int id, double discount, int tax, double salePrice){
+	public Product(int id, Integer discount, Integer tax, Double salePrice){
 		this.id = id;
 		this.discount = discount;
 		this.tax = tax;

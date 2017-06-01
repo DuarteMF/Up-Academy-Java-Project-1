@@ -25,10 +25,13 @@ public abstract class ProductRepository {
 		 productList.put(product.getId(),product);
 	 }
 	 
-	public static void alterElement(int id, double discount, int tax, double price) {
-//		Product productToAlter = productList.get(id);
+	public static void alterElement(Integer id, Integer discount, Integer tax, Double price) {
 		productList.get(id).setDiscount(discount);
 		productList.get(id).setTax(tax);
 		productList.get(id).setSalePrice(price);
+	}
+	
+	public static void removeElement(Integer id){
+		productList.remove(id);
 	}
 }
