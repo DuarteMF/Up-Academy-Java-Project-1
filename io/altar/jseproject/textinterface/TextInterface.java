@@ -48,7 +48,7 @@ public class TextInterface {
 			text += "Vazia!\n";
 		}
 
-		String finalText = text + "Por favor selecione uma das seguintes opções:\n" + "1)	Criar novo produto\n"
+		String finalText = text + "\nPor favor selecione uma das seguintes opções:\n" + "1)	Criar novo produto\n"
 				+ "2)	Editar um produto existente\n" + "3)	Consultar o detalhe de um produto\n"
 				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior";
 		System.out.println(finalText);
