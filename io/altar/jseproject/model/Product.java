@@ -1,10 +1,12 @@
 package io.altar.jseproject.model;
 
+import java.util.Arrays;
+
 import io.altar.jseproject.repository.ProductRepository;
 
 public class Product {
 	private Integer id;
-	// private int [] shelfIdLocation;
+	private Integer [] shelfIdLocation;
 	private Integer discount;
 	private Integer tax;
 	private Double salePrice;	
@@ -13,9 +15,9 @@ public class Product {
 		this.id = id;
 	}
 	
-	/*public void setShelfIdLocation(int [] shelfIdLocation){
+	public void setShelfIdLocation(Integer [] shelfIdLocation){
 		this.shelfIdLocation = shelfIdLocation;
-	}*/
+	}
 	
 	public void setDiscount(Integer discount){
 		this.discount = discount;
@@ -33,9 +35,9 @@ public class Product {
 		return this.id;		
 	}
 	
-	/*public void getShelfIdLocation(){
-		System.out.println(this.shelfIdLocation);
-	}*/
+	public Integer[] getShelfIdLocation(){
+		return this.shelfIdLocation;
+	}
 	
 	public Integer getDiscount(){
 		return this.discount;
@@ -49,8 +51,9 @@ public class Product {
 		return this.salePrice;
 	}
 	
-	public Product(int id, Integer discount, Integer tax, Double salePrice){
+	public Product(int id, Integer[] shelfIdLocation, Integer discount, Integer tax, Double salePrice){
 		this.id = id;
+		this.shelfIdLocation = shelfIdLocation;
 		this.discount = discount;
 		this.tax = tax;
 		this.salePrice = salePrice;
@@ -63,7 +66,7 @@ public class Product {
 	
 	@Override
 	public String toString(){
-		return "| ID: " + id + "| Shelves: " + "| Discount: " + discount + "%| Tax: " + tax + "%| Sale Price: " + salePrice + "€|\n";
+		return "| ID: " + id + "| Shelves: " + Arrays.toString(shelfIdLocation) + "| Discount: " + discount + "%| Tax: " + tax + "%| Sale Price: " + salePrice + "€|\n";
 	}
 	
 }

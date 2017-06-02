@@ -80,7 +80,7 @@ public class TextInterface {
 	}
 
 	public static void listShelfScreen() {
-		String text = "Lista de prateleiras:";
+		String text = "Lista de prateleiras:\n";
 		if (!shelfList.isEmpty()) {
 			for (int ID : shelfList.keySet()) {
 				text += shelfList.get(ID).toString();
@@ -193,7 +193,10 @@ public class TextInterface {
 	public static Integer validateID(Scanner scanner,String text){
 		Integer ID = null;
 		while (true) {
-			ID = validateOption(1, Collections.max(productList.keySet()), scanner, text);
+			ID = validateOption(0, Collections.max(productList.keySet()), scanner, text);
+			if(ID==0){
+				return ID;
+			}
 			if (productList.containsKey(ID)) {
 				return ID;
 			}else{
@@ -214,16 +217,38 @@ public class TextInterface {
 		}
 	}
 
+	public static Integer[] validateIntArray(Scanner scanner, String text){
+		while(true){
+			String input = scanner.nextLine();
+			String[] inputArray = input.split(",\\s*"); //regex -> \\s*
+			Integer[] integerArray = new Integer[inputArray.length];
+			try{
+				for(int i = 0; i < inputArray.length; i++){
+					integerArray[i] = Integer.parseInt(inputArray[i]);
+				}
+				return integerArray;
+			}catch(Exception e){
+				System.out.println("Por favor escolha uma opção válida!");
+				System.out.println(text);
+			}
+		}
+	}
+	
 	public static void createProduct() {
 		productNumber++;
 
 		try (Scanner scanner = new Scanner(System.in)) {
-
-			System.out.println(
-					"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
-			String shelfString = scanner.nextLine();
-			String[] shelfArray = shelfString.split(",\\s*"); // using regex, \\s* means it will split the string by a comma followed by nothing or whitespace
-			// I need to convert the above string array into an integer one;
+			Integer[] shelfIDArray = null;
+			if(!shelfList.keySet().isEmpty()){
+				System.out.println(
+						"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
+				String text = "Lista de prateleiras:\n";
+				for (int ID : shelfList.keySet()) {
+					text += shelfList.get(ID).toString();
+				}
+				System.out.println(text);
+				shelfIDArray = validateIntArray(scanner, text);
+			}			
 
 			System.out.println("Por favor indique o valor unitário de desconto, em percentagem:");
 			Integer discount = validateInt(scanner, false);
@@ -234,7 +259,7 @@ public class TextInterface {
 			System.out.println("Por favor indique o Preço de Venda ao Público:");
 			Double salePrice = validateDouble(scanner, false);
 
-			new Product(productNumber, discount, valueAddedTax, salePrice);
+			new Product(productNumber, shelfIDArray, discount, valueAddedTax, salePrice);
 
 			listProductScreen();
 		}
@@ -321,11 +346,29 @@ public class TextInterface {
 
 			System.out.println("Por favor indique a capacidade da prateleira:");
 			Integer capacity = validateInt(scanner, false);
+			
+			Integer productID = null;
+			if(!productList.keySet().isEmpty()){
+				System.out.println("Por favor indique a ID do produto presente na prateleira (escolha de entre a lista de produtos):");
+				String text = "Lista de produtos:\n";
+				if (!productList.isEmpty()) {
+					for (int ID : productList.keySet()) {
+						text += productList.get(ID).toString();
+					}
+				} else {
+					text += "Vazia!\n";
+				}
+				System.out.println(text);
+				productID = validateID(scanner, text);
+				if (productID == null) {
+					productID = 0;
+				}
+			}			
 
 			System.out.println("Por favor indique o Preço de Aluguer da prateleira:");
 			Double locationRentalPrice = validateDouble(scanner, false);
 
-			new Shelf(shelfNumber, location, capacity, locationRentalPrice);
+			new Shelf(shelfNumber, location, capacity, productID, locationRentalPrice);
 
 			listShelfScreen();
 		}

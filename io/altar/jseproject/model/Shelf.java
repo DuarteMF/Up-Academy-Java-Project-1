@@ -6,7 +6,7 @@ public class Shelf {
 	private Integer id;
 	private Integer location;
 	private Integer capacity;
-	// private String product;
+	private Integer productID;
 	private Double locationRentalPrice;
 	
 	public void setId(Integer id){
@@ -21,9 +21,9 @@ public class Shelf {
 		this.capacity = capacity;
 	}
 	
-	/*public void setProduct(String product){
-		this.product = product;
-	}*/
+	public void setProductID(Integer productID){
+		this.productID = productID;
+	}
 	
 	public void setLocationRentalPrice(Double locationRentalPrice){
 		this.locationRentalPrice = locationRentalPrice;
@@ -41,18 +41,19 @@ public class Shelf {
 		return this.capacity;
 	}
 	
-	/*public String getProduct(){
-		return this.product;
-	}*/
+	public Integer getProductID(){
+		return this.productID;
+	}
 	
 	public Double getLocationRentalPrice(){
 		return this.locationRentalPrice;
 	}
 	
-	public Shelf(int id, Integer location, Integer capacity, Double locationRentalPrice){
+	public Shelf(int id, Integer location, Integer capacity, Integer productID, Double locationRentalPrice){
 		this.id = id;
 		this.location = location;
 		this.capacity = capacity;
+		this.productID = productID;
 		this.locationRentalPrice = locationRentalPrice;
 		ShelfRepository.addToList(this);;
 	}
@@ -63,6 +64,6 @@ public class Shelf {
 	
 	@Override
 	public String toString(){
-		return "ID: " + id + ", Location: " + location + ", Capacity: " + capacity + ", Product: " + ", Location Rental Price: " + locationRentalPrice + "\n";
+		return "| ID: " + id + "| Location: " + location + "| Capacity: " + capacity + "| Product ID: " + productID + "| Location Rental Price: " + locationRentalPrice + "€|\n";
 	}
 }
