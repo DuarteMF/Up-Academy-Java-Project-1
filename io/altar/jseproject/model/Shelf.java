@@ -63,6 +63,6 @@ public class Shelf {
 	
 	@Override
 	public String toString(){
-		return "ID: " + id + ", Location: " + location + ", Capacity: " + capacity + ", Product: " + ", Location Rental Price: " + locationRentalPrice;
+		return "ID: " + id + ", Location: " + location + ", Capacity: " + capacity + ", Product: " + ", Location Rental Price: " + locationRentalPrice + "\n";
 	}
 }

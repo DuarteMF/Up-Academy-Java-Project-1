@@ -16,10 +16,11 @@ public class TextInterface {
 	private static LinkedHashMap<Integer, Shelf> shelfList = ShelfRepository.getInstance();
 
 	public static void firstScreen() {
-		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Listar produtos\n"
-				+ "2)	Listar prateleiras\n" + "3)	Sair");
+		String text = "Por favor selecione uma das seguintes opções:\n" + "1)	Listar produtos\n"
+				+ "2)	Listar prateleiras\n" + "3)	Sair";
+		System.out.println(text);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 3, scanner);
+			Integer input = validateOption(1, 3, scanner, text);
 
 			switch (input) {
 			case 1:
@@ -38,20 +39,21 @@ public class TextInterface {
 	}
 
 	public static void listProductScreen() {
-		System.out.println("Lista de produtos:");
+		String text = "Lista de produtos:\n";
 		if (!productList.isEmpty()) {
 			for (int ID : productList.keySet()) {
-				System.out.println(productList.get(ID).toString());
+				text += productList.get(ID).toString();
 			}
 		} else {
-			System.out.println("Vazia!");
+			text += "Vazia!\n";
 		}
 
-		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Criar novo produto\n"
+		String finalText = text + "Por favor selecione uma das seguintes opções:\n" + "1)	Criar novo produto\n"
 				+ "2)	Editar um produto existente\n" + "3)	Consultar o detalhe de um produto\n"
-				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior");
+				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior";
+		System.out.println(finalText);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 5, scanner);
+			Integer input = validateOption(1, 5, scanner,finalText);
 
 			switch (input) {
 			case 1:
@@ -59,15 +61,15 @@ public class TextInterface {
 				break;
 
 			case 2:
-				alterProduct();
+				alterProduct(text);
 				break;
 
 			case 3:
-				seeProductDetails();
+				seeProductDetails(text);
 				break;
 
 			case 4:
-				removeProduct();
+				removeProduct(text);
 				break;
 
 			case 5:
@@ -78,20 +80,21 @@ public class TextInterface {
 	}
 
 	public static void listShelfScreen() {
-		System.out.println("Lista de prateleiras:");
+		String text = "Lista de prateleiras:";
 		if (!shelfList.isEmpty()) {
 			for (int ID : shelfList.keySet()) {
-				System.out.println(shelfList.get(ID).toString());
+				text += shelfList.get(ID).toString();
 			}
 		} else {
-			System.out.println("Vazia!");
+			text += "Vazia!\n";
 		}
-		
-		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Criar nova prateleira\n"
+		String finalText = text + "Por favor selecione uma das seguintes opções:\n" + "1)	Criar nova prateleira\n"
 				+ "2)	Editar uma prateleira existente\n" + "3)	Consultar o detalhe de uma prateleira\n"
-				+ "4)	Remover uma prateleira\n" + "5)	Voltar ao ecrã anterior");
+				+ "4)	Remover uma prateleira\n" + "5)	Voltar ao ecrã anterior";
+		
+		System.out.println(finalText);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 5, scanner);
+			Integer input = validateOption(1, 5, scanner, finalText);
 
 			switch (input) {
 			case 1:
@@ -99,15 +102,15 @@ public class TextInterface {
 				break;
 
 			case 2:
-				alterShelf();
+				alterShelf(text);
 				break;
 
 			case 3:
-				seeShelfDetails();
+				seeShelfDetails(text);
 				break;
 
 			case 4:
-				removeShelf();
+				removeShelf(text);
 				break;
 
 			case 5:
@@ -121,7 +124,7 @@ public class TextInterface {
 		return;
 	}
 
-	public static Integer validateOption(Integer min, Integer max, Scanner scanner) {
+	public static Integer validateOption(Integer min, Integer max, Scanner scanner, String text) {
 		Integer inputValue = null;
 		String stored = "";
 		while (true) {
@@ -132,9 +135,11 @@ public class TextInterface {
 					return inputValue;
 				}else{
 					System.out.println("Por favor escolha uma opção válida!");
+					System.out.println(text);
 				}
 			}catch(Exception e){
 				System.out.println("Por favor escolha uma opção válida!");
+				System.out.println(text);
 			}
 		}
 	}
@@ -185,10 +190,10 @@ public class TextInterface {
 		}
 	}
 	
-	public static Integer validateID(Scanner scanner){
+	public static Integer validateID(Scanner scanner,String text){
 		Integer ID = null;
 		while (true) {
-			ID = validateOption(1, Collections.max(productList.keySet()), scanner);
+			ID = validateOption(1, Collections.max(productList.keySet()), scanner, text);
 			if (productList.containsKey(ID)) {
 				return ID;
 			}else{
@@ -197,10 +202,10 @@ public class TextInterface {
 		}
 	}
 	
-	public static Integer validateIDShelf(Scanner scanner){
+	public static Integer validateIDShelf(Scanner scanner, String text){
 		Integer ID = null;
 		while (true) {
-			ID = validateOption(1, Collections.max(shelfList.keySet()), scanner);
+			ID = validateOption(1, Collections.max(shelfList.keySet()), scanner, text);
 			if (shelfList.containsKey(ID)) {
 				return ID;
 			}else{
@@ -235,11 +240,11 @@ public class TextInterface {
 		}
 	}
 	
-	public static void alterProduct() {
+	public static void alterProduct(String text) {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a alterar:");
 
-			Integer productID = validateID(scanner);
+			Integer productID = validateID(scanner, text);
 
 			System.out.println("Este produto existe nas seguintes prateleiras: ");
 
@@ -270,11 +275,11 @@ public class TextInterface {
 		}
 	}
 
-	public static void seeProductDetails() {
+	public static void seeProductDetails(String text) {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a consultar:");
 
-			Integer productID = validateID(scanner);
+			Integer productID = validateID(scanner, text);
 
 			System.out.println(productList.get(productID).toString());
 			System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
@@ -283,11 +288,11 @@ public class TextInterface {
 		}
 	}
 
-	public static void removeProduct() {
+	public static void removeProduct(String text) {
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			System.out.println("Por favor indique a ID do produto a remover:");
-			Integer productID = validateID(scanner);
+			Integer productID = validateID(scanner, text);
 			
 			System.out.println("Este é o produto que escolheu:");
 			System.out.println(productList.get(productID).toString());
@@ -326,11 +331,11 @@ public class TextInterface {
 		}
 	}
 
-	public static void alterShelf(){
+	public static void alterShelf(String text){
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID da prateleira a alterar:");
 
-			Integer shelfID = validateIDShelf(scanner);
+			Integer shelfID = validateIDShelf(scanner, text);
 
 			System.out.println("Esta prateleira contém os seguintes produtos: ");
 
@@ -361,11 +366,11 @@ public class TextInterface {
 		}
 	}
 
-	public static void seeShelfDetails(){
+	public static void seeShelfDetails(String text){
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID da prateleira a consultar:");
 
-			Integer shelfID = validateIDShelf(scanner);
+			Integer shelfID = validateIDShelf(scanner, text);
 
 			System.out.println(shelfList.get(shelfID).toString());
 			System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
@@ -374,11 +379,11 @@ public class TextInterface {
 		}
 	}
 
-	public static void removeShelf(){
+	public static void removeShelf(String text){
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			System.out.println("Por favor indique a ID da prateleira a remover:");
-			Integer shelfID = validateIDShelf(scanner);
+			Integer shelfID = validateIDShelf(scanner, text);
 			
 			System.out.println("Este é a prateleira que escolheu:");
 			System.out.println(shelfList.get(shelfID).toString());
