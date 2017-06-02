@@ -5,11 +5,15 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
+import io.altar.jseproject.model.Shelf;
 import io.altar.jseproject.repository.ProductRepository;
+import io.altar.jseproject.repository.ShelfRepository;
 
 public class TextInterface {
 	private static int productNumber = 0;
+	private static int shelfNumber = 0;
 	private static LinkedHashMap<Integer, Product> productList = ProductRepository.getInstance();
+	private static LinkedHashMap<Integer, Shelf> shelfList = ShelfRepository.getInstance();
 
 	public static void firstScreen() {
 		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Listar produtos\n"
@@ -74,7 +78,15 @@ public class TextInterface {
 	}
 
 	public static void listShelfScreen() {
-		// List Shelves
+		System.out.println("Lista de prateleiras:");
+		if (!shelfList.isEmpty()) {
+			for (int ID : shelfList.keySet()) {
+				System.out.println(shelfList.get(ID).toString());
+			}
+		} else {
+			System.out.println("Vazia!");
+		}
+		
 		System.out.println("Por favor selecione uma das seguintes opções:\n" + "1)	Criar nova prateleira\n"
 				+ "2)	Editar uma prateleira existente\n" + "3)	Consultar o detalhe de uma prateleira\n"
 				+ "4)	Remover uma prateleira\n" + "5)	Voltar ao ecrã anterior");
@@ -83,15 +95,19 @@ public class TextInterface {
 
 			switch (input) {
 			case 1:
+				createShelf();
 				break;
 
 			case 2:
+				alterShelf();
 				break;
 
 			case 3:
+				seeShelfDetails();
 				break;
 
 			case 4:
+				removeShelf();
 				break;
 
 			case 5:
@@ -170,11 +186,23 @@ public class TextInterface {
 	}
 	
 	public static Integer validateID(Scanner scanner){
-		Integer productID = null;
+		Integer ID = null;
 		while (true) {
-			productID = validateOption(1, Collections.max(productList.keySet()), scanner);
-			if (productList.containsKey(productID)) {
-				return productID;
+			ID = validateOption(1, Collections.max(productList.keySet()), scanner);
+			if (productList.containsKey(ID)) {
+				return ID;
+			}else{
+				System.out.println("Por favor escolha uma opção válida!");
+			}
+		}
+	}
+	
+	public static Integer validateIDShelf(Scanner scanner){
+		Integer ID = null;
+		while (true) {
+			ID = validateOption(1, Collections.max(shelfList.keySet()), scanner);
+			if (shelfList.containsKey(ID)) {
+				return ID;
 			}else{
 				System.out.println("Por favor escolha uma opção válida!");
 			}
@@ -192,7 +220,7 @@ public class TextInterface {
 			String[] shelfArray = shelfString.split(",\\s*"); // using regex, \\s* means it will split the string by a comma followed by nothing or whitespace
 			// I need to convert the above string array into an integer one;
 
-			System.out.println("Por favor indique o valor unitário de desconto,em percentagem:");
+			System.out.println("Por favor indique o valor unitário de desconto, em percentagem:");
 			Integer discount = validateInt(scanner, false);
 
 			System.out.println("Por favor indique o Imposto de Valor Acrescentado, em percentagem:");
@@ -271,6 +299,97 @@ public class TextInterface {
 					listProductScreen();
 				}else if(response.equals("n")){
 					listProductScreen();
+				}else{
+					System.out.println("Por favor prima s ou n");
+				}
+			}
+		}
+	}
+	
+	public static void createShelf(){
+		shelfNumber++;
+
+		try (Scanner scanner = new Scanner(System.in)) {
+
+			System.out.println("Por favor indique a localização da prateleira:");
+			Integer location = validateInt(scanner, false);
+
+			System.out.println("Por favor indique a capacidade da prateleira:");
+			Integer capacity = validateInt(scanner, false);
+
+			System.out.println("Por favor indique o Preço de Aluguer da prateleira:");
+			Double locationRentalPrice = validateDouble(scanner, false);
+
+			new Shelf(shelfNumber, location, capacity, locationRentalPrice);
+
+			listShelfScreen();
+		}
+	}
+
+	public static void alterShelf(){
+		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.println("Por favor indique a ID da prateleira a alterar:");
+
+			Integer shelfID = validateIDShelf(scanner);
+
+			System.out.println("Esta prateleira contém os seguintes produtos: ");
+
+			System.out.println("Esta prateleira tem a seguinte localização: " + shelfList.get(shelfID).getLocation()
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+			Integer newLocation = validateInt(scanner, true);
+			if (newLocation == null) {
+				newLocation = shelfList.get(shelfID).getLocation();
+			}
+
+			System.out.println("Esta prateleira tem a seguinte capacidade: " + shelfList.get(shelfID).getCapacity()
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+			Integer newCapacity = validateInt(scanner, true);
+			if (newCapacity == null) {
+				newCapacity = shelfList.get(shelfID).getCapacity();
+			}
+
+			System.out.println("Esta prateleira tem o seguinte preço de aluguer: " + shelfList.get(shelfID).getLocationRentalPrice()
+					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+			Double newLocationRentalPrice = validateDouble(scanner, true);
+			if (newLocationRentalPrice == null) {
+				newLocationRentalPrice = shelfList.get(shelfID).getLocationRentalPrice();
+			}
+
+			ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
+
+			listShelfScreen();
+		}
+	}
+
+	public static void seeShelfDetails(){
+		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.println("Por favor indique a ID da prateleira a consultar:");
+
+			Integer shelfID = validateIDShelf(scanner);
+
+			System.out.println(shelfList.get(shelfID).toString());
+			System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
+			scanner.nextLine();
+			listShelfScreen();
+		}
+	}
+
+	public static void removeShelf(){
+		try (Scanner scanner = new Scanner(System.in)) {
+
+			System.out.println("Por favor indique a ID da prateleira a remover:");
+			Integer shelfID = validateIDShelf(scanner);
+			
+			System.out.println("Este é a prateleira que escolheu:");
+			System.out.println(shelfList.get(shelfID).toString());
+			System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
+			while(true){				
+				String response = scanner.nextLine();
+				if(response.equals("s")){
+					ShelfRepository.removeElement(shelfID);
+					listShelfScreen();
+				}else if(response.equals("n")){
+					listShelfScreen();
 				}else{
 					System.out.println("Por favor prima s ou n");
 				}
