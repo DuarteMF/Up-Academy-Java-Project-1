@@ -4,16 +4,11 @@ import java.util.Arrays;
 
 import io.altar.jseproject.repository.ProductRepository;
 
-public class Product {
-	private Integer id;
+public class Product extends Entity{
 	private Integer [] shelfIdLocation;
 	private Integer discount;
 	private Integer tax;
 	private Double salePrice;	
-
-	public void setId(Integer id){
-		this.id = id;
-	}
 	
 	public void setShelfIdLocation(Integer [] shelfIdLocation){
 		this.shelfIdLocation = shelfIdLocation;
@@ -29,10 +24,6 @@ public class Product {
 	
 	public void setSalePrice(Double salePrice){
 		this.salePrice = salePrice;
-	}
-	
-	public Integer getId(){
-		return this.id;		
 	}
 	
 	public Integer[] getShelfIdLocation(){
@@ -51,22 +42,17 @@ public class Product {
 		return this.salePrice;
 	}
 	
-	public Product(int id, Integer[] shelfIdLocation, Integer discount, Integer tax, Double salePrice){
-		this.id = id;
+	public Product(Integer[] shelfIdLocation, Integer discount, Integer tax, Double salePrice){
 		this.shelfIdLocation = shelfIdLocation;
 		this.discount = discount;
 		this.tax = tax;
 		this.salePrice = salePrice;
-		ProductRepository.addToList(this);;
-	}
-	
-	public Product(){
-		
+		ProductRepository.getInstance().addToList(this);
 	}
 	
 	@Override
 	public String toString(){
-		return "| ID: " + id + "| Shelves: " + Arrays.toString(shelfIdLocation) + "| Discount: " + discount + "%| Tax: " + tax + "%| Sale Price: " + salePrice + "€|\n";
+		return "| ID: " + getId() + "| Shelves: " + Arrays.toString(shelfIdLocation) + "| Discount: " + discount + "%| Tax: " + tax + "%| Sale Price: " + salePrice + "€|\n";
 	}
 	
 }

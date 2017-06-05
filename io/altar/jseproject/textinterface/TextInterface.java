@@ -1,26 +1,24 @@
 package io.altar.jseproject.textinterface;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
 import io.altar.jseproject.model.Shelf;
 import io.altar.jseproject.repository.ProductRepository;
 import io.altar.jseproject.repository.ShelfRepository;
+import io.altar.jseproject.util.Utils;
 
 public class TextInterface {
-	private static int productNumber = 0;
-	private static int shelfNumber = 0;
-	private static LinkedHashMap<Integer, Product> productList = ProductRepository.getInstance();
-	private static LinkedHashMap<Integer, Shelf> shelfList = ShelfRepository.getInstance();
+	private static ProductRepository productList = ProductRepository.getInstance();
+	private static ShelfRepository shelfList = ShelfRepository.getInstance();
 
 	public static void firstScreen() {
 		String text = "Por favor selecione uma das seguintes opções:\n" + "1)	Listar produtos\n"
 				+ "2)	Listar prateleiras\n" + "3)	Sair";
 		System.out.println(text);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 3, scanner, text);
+			Integer input = Utils.validate(1, 3, scanner, text);
 
 			switch (input) {
 			case 1:
@@ -41,7 +39,7 @@ public class TextInterface {
 	public static void listProductScreen() {
 		String text = "Lista de produtos:\n";
 		if (!productList.isEmpty()) {
-			for (int ID : productList.keySet()) {
+			for (Integer ID : productList.keySet()) {
 				text += productList.get(ID).toString();
 			}
 		} else {
@@ -53,7 +51,7 @@ public class TextInterface {
 				+ "4)	Remover um produto\n" + "5)	Voltar ao ecrã anterior";
 		System.out.println(finalText);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 5, scanner,finalText);
+			Integer input = Utils.validate(1, 5, scanner,finalText);
 
 			switch (input) {
 			case 1:
@@ -94,7 +92,7 @@ public class TextInterface {
 		
 		System.out.println(finalText);
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer input = validateOption(1, 5, scanner, finalText);
+			Integer input = Utils.validate(1, 5, scanner, finalText);
 
 			switch (input) {
 			case 1:
@@ -123,77 +121,11 @@ public class TextInterface {
 	public static void leave() {
 		return;
 	}
-
-	public static Integer validateOption(Integer min, Integer max, Scanner scanner, String text) {
-		Integer inputValue = null;
-		String stored = "";
-		while (true) {
-			stored = scanner.nextLine();
-			try{
-				inputValue = Integer.parseInt(stored);
-				if ((inputValue >= min && inputValue <= max)) {
-					return inputValue;
-				}else{
-					System.out.println("Por favor escolha uma opção válida!");
-					System.out.println(text);
-				}
-			}catch(Exception e){
-				System.out.println("Por favor escolha uma opção válida!");
-				System.out.println(text);
-			}
-		}
-	}
-
-	public static Integer validateInt(Scanner scanner, boolean emptyAllowed) {	
-		Integer inputValue = null;
-		String stored = "";
-		while (true) {
-			stored = scanner.nextLine();
-			if (stored.isEmpty()) {
-				if(emptyAllowed){
-					return null;
-				} 	
-			}			
-			else {
-				try{
-					inputValue = Integer.parseInt(stored);
-					return inputValue;
-				}
-				catch(Exception e){
-					System.out.println("Por favor escolha uma opção válida!");
-				}
-			}
-
-		}
-	}
-
-	public static Double validateDouble(Scanner scanner, boolean emptyAllowed) {
-		Double inputValue = null;
-		String stored = "";
-		while (true) {
-			stored = scanner.nextLine();
-			if (stored.isEmpty()) {
-				if(emptyAllowed){
-					return null;
-				} 	
-			}					
-			else {
-				try{
-					inputValue = Double.parseDouble(stored);
-					return inputValue;
-				}
-				catch(Exception e){
-					System.out.println("Por favor escolha uma opção válida!");
-				}
-			}
-
-		}
-	}
 	
 	public static Integer validateID(Scanner scanner,String text){
 		Integer ID = null;
 		while (true) {
-			ID = validateOption(0, Collections.max(productList.keySet()), scanner, text);
+			ID = Utils.validate(0, Collections.max(productList.keySet()), scanner, text);
 			if(ID==0){
 				return ID;
 			}
@@ -208,7 +140,7 @@ public class TextInterface {
 	public static Integer validateIDShelf(Scanner scanner, String text){
 		Integer ID = null;
 		while (true) {
-			ID = validateOption(1, Collections.max(shelfList.keySet()), scanner, text);
+			ID = Utils.validate(1, Collections.max(shelfList.keySet()), scanner, text);
 			if (shelfList.containsKey(ID)) {
 				return ID;
 			}else{
@@ -216,26 +148,8 @@ public class TextInterface {
 			}
 		}
 	}
-
-	public static Integer[] validateIntArray(Scanner scanner, String text){
-		while(true){
-			String input = scanner.nextLine();
-			String[] inputArray = input.split(",\\s*"); //regex -> \\s*
-			Integer[] integerArray = new Integer[inputArray.length];
-			try{
-				for(int i = 0; i < inputArray.length; i++){
-					integerArray[i] = Integer.parseInt(inputArray[i]);
-				}
-				return integerArray;
-			}catch(Exception e){
-				System.out.println("Por favor escolha uma opção válida!");
-				System.out.println(text);
-			}
-		}
-	}
 	
 	public static void createProduct() {
-		productNumber++;
 
 		try (Scanner scanner = new Scanner(System.in)) {
 			Integer[] shelfIDArray = null;
@@ -247,19 +161,19 @@ public class TextInterface {
 					text += shelfList.get(ID).toString();
 				}
 				System.out.println(text);
-				shelfIDArray = validateIntArray(scanner, text);
+				shelfIDArray = Utils.validateIntArray(scanner, text);
 			}			
 
 			System.out.println("Por favor indique o valor unitário de desconto, em percentagem:");
-			Integer discount = validateInt(scanner, false);
+			Integer discount = Integer.parseInt(Utils.validate(scanner, false, "integer"));
 
 			System.out.println("Por favor indique o Imposto de Valor Acrescentado, em percentagem:");
-			Integer valueAddedTax = validateInt(scanner, false);
+			Integer valueAddedTax = Integer.parseInt(Utils.validate(scanner, false, "integer"));
 
 			System.out.println("Por favor indique o Preço de Venda ao Público:");
-			Double salePrice = validateDouble(scanner, false);
+			Double salePrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
-			new Product(productNumber, shelfIDArray, discount, valueAddedTax, salePrice);
+			new Product(shelfIDArray, discount, valueAddedTax, salePrice);
 
 			listProductScreen();
 		}
@@ -273,25 +187,28 @@ public class TextInterface {
 
 			System.out.println("Este produto existe nas seguintes prateleiras: ");
 
-			System.out.println("Este produto tem o seguinte desconto: " + productList.get(productID).getDiscount()
+			System.out.println("Este produto tem o seguinte desconto: " + ((Product)productList.get(productID)).getDiscount()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Integer newDiscount = validateInt(scanner, true);
-			if (newDiscount == null) {
-				newDiscount = productList.get(productID).getDiscount();
+			String discount = Utils.validate(scanner, true, "integer");
+			Integer newDiscount = ((Product)productList.get(productID)).getDiscount();
+			if (discount != null) {
+				newDiscount = Integer.parseInt(discount);
 			}
 
-			System.out.println("Este produto tem o seguinte imposto: " + productList.get(productID).getTax()
+			System.out.println("Este produto tem o seguinte imposto: " + ((Product)productList.get(productID)).getTax()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Integer newTax = validateInt(scanner, true);
-			if (newTax == null) {
-				newTax = productList.get(productID).getTax();
+			String tax = Utils.validate(scanner, true, "integer");
+			Integer newTax = ((Product)productList.get(productID)).getTax();
+			if (tax != null) {
+				newTax = Integer.parseInt(tax);
 			}
 
-			System.out.println("Este produto tem o seguinte preço: " + productList.get(productID).getSalePrice()
+			System.out.println("Este produto tem o seguinte preço: " + ((Product)productList.get(productID)).getSalePrice()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Double newSalePrice = validateDouble(scanner, true);
-			if (newSalePrice == null) {
-				newSalePrice = productList.get(productID).getSalePrice();
+			String salePrice = Utils.validate(scanner, true, "double");
+			Double newSalePrice = ((Product)productList.get(productID)).getSalePrice();
+			if (salePrice != null) {
+				newSalePrice = Double.parseDouble(salePrice);
 			}
 
 			ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
@@ -325,7 +242,7 @@ public class TextInterface {
 			while(true){				
 				String response = scanner.nextLine();
 				if(response.equals("s")){
-					ProductRepository.removeElement(productID);
+					productList.removeElement(productID);
 					listProductScreen();
 				}else if(response.equals("n")){
 					listProductScreen();
@@ -337,15 +254,14 @@ public class TextInterface {
 	}
 	
 	public static void createShelf(){
-		shelfNumber++;
 
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			System.out.println("Por favor indique a localização da prateleira:");
-			Integer location = validateInt(scanner, false);
+			Integer location = Integer.parseInt(Utils.validate(scanner, false, "integer"));
 
 			System.out.println("Por favor indique a capacidade da prateleira:");
-			Integer capacity = validateInt(scanner, false);
+			Integer capacity = Integer.parseInt(Utils.validate(scanner, false, "integer"));
 			
 			Integer productID = null;
 			if(!productList.keySet().isEmpty()){
@@ -366,9 +282,9 @@ public class TextInterface {
 			}			
 
 			System.out.println("Por favor indique o Preço de Aluguer da prateleira:");
-			Double locationRentalPrice = validateDouble(scanner, false);
+			Double locationRentalPrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
-			new Shelf(shelfNumber, location, capacity, productID, locationRentalPrice);
+			new Shelf(location, capacity, productID, locationRentalPrice);
 
 			listShelfScreen();
 		}
@@ -382,25 +298,28 @@ public class TextInterface {
 
 			System.out.println("Esta prateleira contém os seguintes produtos: ");
 
-			System.out.println("Esta prateleira tem a seguinte localização: " + shelfList.get(shelfID).getLocation()
+			System.out.println("Esta prateleira tem a seguinte localização: " + ((Shelf)shelfList.get(shelfID)).getLocation()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Integer newLocation = validateInt(scanner, true);
-			if (newLocation == null) {
-				newLocation = shelfList.get(shelfID).getLocation();
+			String location = Utils.validate(scanner, true, "integer");
+			Integer newLocation = ((Shelf)shelfList.get(shelfID)).getLocation();
+			if (location != null) {
+				newLocation = Integer.parseInt(location);
 			}
 
-			System.out.println("Esta prateleira tem a seguinte capacidade: " + shelfList.get(shelfID).getCapacity()
+			System.out.println("Esta prateleira tem a seguinte capacidade: " + ((Shelf)shelfList.get(shelfID)).getCapacity()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Integer newCapacity = validateInt(scanner, true);
-			if (newCapacity == null) {
-				newCapacity = shelfList.get(shelfID).getCapacity();
+			String capacity = Utils.validate(scanner, true, "integer");
+			Integer newCapacity = ((Shelf)shelfList.get(shelfID)).getCapacity();
+			if (capacity != null) {
+				newCapacity = Integer.parseInt(capacity);
 			}
 
-			System.out.println("Esta prateleira tem o seguinte preço de aluguer: " + shelfList.get(shelfID).getLocationRentalPrice()
+			System.out.println("Esta prateleira tem o seguinte preço de aluguer: " + ((Shelf)shelfList.get(shelfID)).getLocationRentalPrice()
 					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			Double newLocationRentalPrice = validateDouble(scanner, true);
-			if (newLocationRentalPrice == null) {
-				newLocationRentalPrice = shelfList.get(shelfID).getLocationRentalPrice();
+			String locationRentalPrice = Utils.validate(scanner, true, "double");
+			Double newLocationRentalPrice = ((Shelf)shelfList.get(shelfID)).getLocationRentalPrice();
+			if (locationRentalPrice != null) {
+				newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
 			}
 
 			ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
@@ -434,7 +353,7 @@ public class TextInterface {
 			while(true){				
 				String response = scanner.nextLine();
 				if(response.equals("s")){
-					ShelfRepository.removeElement(shelfID);
+					shelfList.removeElement(shelfID);
 					listShelfScreen();
 				}else if(response.equals("n")){
 					listShelfScreen();
