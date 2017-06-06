@@ -1,6 +1,5 @@
 package io.altar.jseproject.textinterface;
 
-import java.util.Collections;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
@@ -122,33 +121,6 @@ public class TextInterface {
 		return;
 	}
 	
-	public static Integer validateID(Scanner scanner,String text){
-		Integer ID = null;
-		while (true) {
-			ID = Utils.validate(0, Collections.max(productList.keySet()), scanner, text);
-			if(ID==0){
-				return ID;
-			}
-			if (productList.containsKey(ID)) {
-				return ID;
-			}else{
-				System.out.println("Por favor escolha uma opção válida!");
-			}
-		}
-	}
-	
-	public static Integer validateIDShelf(Scanner scanner, String text){
-		Integer ID = null;
-		while (true) {
-			ID = Utils.validate(1, Collections.max(shelfList.keySet()), scanner, text);
-			if (shelfList.containsKey(ID)) {
-				return ID;
-			}else{
-				System.out.println("Por favor escolha uma opção válida!");
-			}
-		}
-	}
-	
 	public static void createProduct() {
 
 		try (Scanner scanner = new Scanner(System.in)) {
@@ -183,37 +155,40 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a alterar:");
 
-			Integer productID = validateID(scanner, text);
+			Integer productID = Utils.validate(scanner, text, "product");
+			if(productID==0){
+				listProductScreen();
+			}else{
+				System.out.println("Este produto existe nas seguintes prateleiras: ");
 
-			System.out.println("Este produto existe nas seguintes prateleiras: ");
+				System.out.println("Este produto tem o seguinte desconto: " + ((Product)productList.get(productID)).getDiscount()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String discount = Utils.validate(scanner, true, "integer");
+				Integer newDiscount = ((Product)productList.get(productID)).getDiscount();
+				if (discount != null) {
+					newDiscount = Integer.parseInt(discount);
+				}
 
-			System.out.println("Este produto tem o seguinte desconto: " + ((Product)productList.get(productID)).getDiscount()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String discount = Utils.validate(scanner, true, "integer");
-			Integer newDiscount = ((Product)productList.get(productID)).getDiscount();
-			if (discount != null) {
-				newDiscount = Integer.parseInt(discount);
-			}
+				System.out.println("Este produto tem o seguinte imposto: " + ((Product)productList.get(productID)).getTax()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String tax = Utils.validate(scanner, true, "integer");
+				Integer newTax = ((Product)productList.get(productID)).getTax();
+				if (tax != null) {
+					newTax = Integer.parseInt(tax);
+				}
 
-			System.out.println("Este produto tem o seguinte imposto: " + ((Product)productList.get(productID)).getTax()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String tax = Utils.validate(scanner, true, "integer");
-			Integer newTax = ((Product)productList.get(productID)).getTax();
-			if (tax != null) {
-				newTax = Integer.parseInt(tax);
-			}
+				System.out.println("Este produto tem o seguinte preço: " + ((Product)productList.get(productID)).getSalePrice()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String salePrice = Utils.validate(scanner, true, "double");
+				Double newSalePrice = ((Product)productList.get(productID)).getSalePrice();
+				if (salePrice != null) {
+					newSalePrice = Double.parseDouble(salePrice);
+				}
 
-			System.out.println("Este produto tem o seguinte preço: " + ((Product)productList.get(productID)).getSalePrice()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String salePrice = Utils.validate(scanner, true, "double");
-			Double newSalePrice = ((Product)productList.get(productID)).getSalePrice();
-			if (salePrice != null) {
-				newSalePrice = Double.parseDouble(salePrice);
-			}
+				ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
 
-			ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
-
-			listProductScreen();
+				listProductScreen();
+			}			
 		}
 	}
 
@@ -221,12 +196,15 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a consultar:");
 
-			Integer productID = validateID(scanner, text);
-
-			System.out.println(productList.get(productID).toString());
-			System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
-			scanner.nextLine();
-			listProductScreen();
+			Integer productID = Utils.validate(scanner, text,"product");
+			if(productID==0){
+				listProductScreen();
+			}else{
+				System.out.println(productList.get(productID).toString());
+				System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
+				scanner.nextLine();
+				listProductScreen();
+			}
 		}
 	}
 
@@ -234,20 +212,23 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			System.out.println("Por favor indique a ID do produto a remover:");
-			Integer productID = validateID(scanner, text);
-			
-			System.out.println("Este é o produto que escolheu:");
-			System.out.println(productList.get(productID).toString());
-			System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
-			while(true){				
-				String response = scanner.nextLine();
-				if(response.equals("s")){
-					productList.removeElement(productID);
-					listProductScreen();
-				}else if(response.equals("n")){
-					listProductScreen();
-				}else{
-					System.out.println("Por favor prima s ou n");
+			Integer productID = Utils.validate(scanner, text, "product");
+			if(productID==0){
+				listProductScreen();
+			}else{			
+				System.out.println("Este é o produto que escolheu:");
+				System.out.println(productList.get(productID).toString());
+				System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
+				while (true) {
+					String response = scanner.nextLine();
+					if (response.equals("s")) {
+						productList.removeElement(productID);
+						listProductScreen();
+					} else if (response.equals("n")) {
+						listProductScreen();
+					} else {
+						System.out.println("Por favor prima s ou n");
+					}
 				}
 			}
 		}
@@ -275,7 +256,7 @@ public class TextInterface {
 					text += "Vazia!\n";
 				}
 				System.out.println(text);
-				productID = validateID(scanner, text);
+				productID = Utils.validate(scanner, text, "product");
 				if (productID == null) {
 					productID = 0;
 				}
@@ -294,37 +275,44 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID da prateleira a alterar:");
 
-			Integer shelfID = validateIDShelf(scanner, text);
+			Integer shelfID = Utils.validate(scanner, text, "shelf");
 
-			System.out.println("Esta prateleira contém os seguintes produtos: ");
+			if(shelfID == 0){
+				listShelfScreen();
+			}else{
+				System.out.println("Esta prateleira contém os seguintes produtos: ");
 
-			System.out.println("Esta prateleira tem a seguinte localização: " + ((Shelf)shelfList.get(shelfID)).getLocation()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String location = Utils.validate(scanner, true, "integer");
-			Integer newLocation = ((Shelf)shelfList.get(shelfID)).getLocation();
-			if (location != null) {
-				newLocation = Integer.parseInt(location);
+				System.out.println("Esta prateleira tem a seguinte localização: "
+						+ ((Shelf) shelfList.get(shelfID)).getLocation()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String location = Utils.validate(scanner, true, "integer");
+				Integer newLocation = ((Shelf) shelfList.get(shelfID)).getLocation();
+				if (location != null) {
+					newLocation = Integer.parseInt(location);
+				}
+
+				System.out.println("Esta prateleira tem a seguinte capacidade: "
+						+ ((Shelf) shelfList.get(shelfID)).getCapacity()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String capacity = Utils.validate(scanner, true, "integer");
+				Integer newCapacity = ((Shelf) shelfList.get(shelfID)).getCapacity();
+				if (capacity != null) {
+					newCapacity = Integer.parseInt(capacity);
+				}
+
+				System.out.println("Esta prateleira tem o seguinte preço de aluguer: "
+						+ ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice()
+						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				String locationRentalPrice = Utils.validate(scanner, true, "double");
+				Double newLocationRentalPrice = ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice();
+				if (locationRentalPrice != null) {
+					newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
+				}
+
+				ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
+
+				listShelfScreen();
 			}
-
-			System.out.println("Esta prateleira tem a seguinte capacidade: " + ((Shelf)shelfList.get(shelfID)).getCapacity()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String capacity = Utils.validate(scanner, true, "integer");
-			Integer newCapacity = ((Shelf)shelfList.get(shelfID)).getCapacity();
-			if (capacity != null) {
-				newCapacity = Integer.parseInt(capacity);
-			}
-
-			System.out.println("Esta prateleira tem o seguinte preço de aluguer: " + ((Shelf)shelfList.get(shelfID)).getLocationRentalPrice()
-					+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
-			String locationRentalPrice = Utils.validate(scanner, true, "double");
-			Double newLocationRentalPrice = ((Shelf)shelfList.get(shelfID)).getLocationRentalPrice();
-			if (locationRentalPrice != null) {
-				newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
-			}
-
-			ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
-
-			listShelfScreen();
 		}
 	}
 
@@ -332,12 +320,16 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID da prateleira a consultar:");
 
-			Integer shelfID = validateIDShelf(scanner, text);
+			Integer shelfID = Utils.validate(scanner, text, "shelf");
 
-			System.out.println(shelfList.get(shelfID).toString());
-			System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
-			scanner.nextLine();
-			listShelfScreen();
+			if(shelfID == 0){
+				listShelfScreen();
+			}else{
+				System.out.println(shelfList.get(shelfID).toString());
+				System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
+				scanner.nextLine();
+				listShelfScreen();
+			}
 		}
 	}
 
@@ -345,20 +337,24 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 
 			System.out.println("Por favor indique a ID da prateleira a remover:");
-			Integer shelfID = validateIDShelf(scanner, text);
+			Integer shelfID = Utils.validate(scanner, text, "shelf");
 			
-			System.out.println("Este é a prateleira que escolheu:");
-			System.out.println(shelfList.get(shelfID).toString());
-			System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
-			while(true){				
-				String response = scanner.nextLine();
-				if(response.equals("s")){
-					shelfList.removeElement(shelfID);
-					listShelfScreen();
-				}else if(response.equals("n")){
-					listShelfScreen();
-				}else{
-					System.out.println("Por favor prima s ou n");
+			if(shelfID == 0){
+				listShelfScreen();
+			}else{
+				System.out.println("Este é a prateleira que escolheu:");
+				System.out.println(shelfList.get(shelfID).toString());
+				System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
+				while(true){				
+					String response = scanner.nextLine();
+					if(response.equals("s")){
+						shelfList.removeElement(shelfID);
+						listShelfScreen();
+					}else if(response.equals("n")){
+						listShelfScreen();
+					}else{
+						System.out.println("Por favor prima s ou n");
+					}
 				}
 			}
 		}

@@ -4,7 +4,11 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Entity;
+import io.altar.jseproject.model.Product;
+import io.altar.jseproject.model.Shelf;
 import io.altar.jseproject.repository.EntityRepository;
+import io.altar.jseproject.repository.ProductRepository;
+import io.altar.jseproject.repository.ShelfRepository;
 
 public abstract class Utils {
 	public static Integer validate(Integer min, Integer max, Scanner scanner, String text) {
@@ -55,8 +59,14 @@ public abstract class Utils {
 		}
 	}
 	
-	public static Integer validate(Scanner scanner, String text, EntityRepository<Entity> entityList){
+	public static Integer validate(Scanner scanner, String text, String entityType){
 		Integer ID = null;
+		EntityRepository<? extends Entity> entityList = null;
+		if(entityType.equals("product")){
+			entityList = (EntityRepository<Product>)ProductRepository.getInstance();
+		}else if(entityType.equals("shelf")){
+			entityList = (EntityRepository<Shelf>)ShelfRepository.getInstance();
+		}
 		while (true) {
 			ID = validate(0, Collections.max(entityList.keySet()), scanner, text);
 			if(ID==0){

@@ -7,9 +7,7 @@ public class Test {
 		TextInterface.firstScreen();
 				
 //		Scanner scanner = new Scanner(System.in);
-//	    String readString = scanner.nextLine();
-//		if (readString.isEmpty()) {
-//			System.out.println("Read Enter Key.");
-//		}
+//	    System.out.println(Utils.validate(scanner, "teste product", "product"));
+//	    System.out.println(Utils.validate(scanner, "teste shelf", "shelf"));
 	}
 }
