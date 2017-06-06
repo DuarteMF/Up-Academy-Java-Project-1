@@ -39,4 +39,8 @@ public class EntityRepository<E extends Entity> {
 	public boolean containsKey(Integer key){
 		return entityList.containsKey(key);
 	}
+	
+	public void displayElement(Integer key){
+		System.out.println(entityList.get(key).toString());
+	}
 }

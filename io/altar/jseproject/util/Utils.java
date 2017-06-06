@@ -38,7 +38,9 @@ public abstract class Utils {
 			if (stored.isEmpty()) {
 				if(emptyAllowed){
 					return null;
-				} 	
+				}else{
+					System.out.println("Por favor escolha uma opção válida!");
+				}
 			}			
 			else {
 				try{
@@ -83,16 +85,20 @@ public abstract class Utils {
 	public static Integer[] validateIntArray(Scanner scanner, String text){
 		while(true){
 			String input = scanner.nextLine();
-			String[] inputArray = input.split(",\\s*"); //regex -> \\s*
-			Integer[] integerArray = new Integer[inputArray.length];
-			try{
-				for(int i = 0; i < inputArray.length; i++){
-					integerArray[i] = Integer.parseInt(inputArray[i]);
+			if(!input.isEmpty()){
+				String[] inputArray = input.split(",\\s*"); // regex -> \\s*
+				Integer[] integerArray = new Integer[inputArray.length];
+				try {
+					for (int i = 0; i < inputArray.length; i++) {
+						integerArray[i] = Integer.parseInt(inputArray[i]);
+					}
+					return integerArray;
+				} catch (Exception e) {
+					System.out.println("Por favor escolha uma opção válida!");
+					System.out.println(text);
 				}
-				return integerArray;
-			}catch(Exception e){
-				System.out.println("Por favor escolha uma opção válida!");
-				System.out.println(text);
+			}else{
+				return null;
 			}
 		}
 	}

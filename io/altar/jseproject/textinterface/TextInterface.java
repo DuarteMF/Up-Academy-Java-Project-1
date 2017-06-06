@@ -226,7 +226,7 @@ public class TextInterface {
 			if (productID == 0) {
 				listProductScreen();
 			} else {
-				System.out.println(productList.get(productID).toString());
+				productList.displayElement(productID);
 				System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
 				scanner.nextLine();
 				listProductScreen();
@@ -352,7 +352,7 @@ public class TextInterface {
 			if (shelfID == 0) {
 				listShelfScreen();
 			} else {
-				System.out.println(shelfList.get(shelfID).toString());
+				shelfList.displayElement(shelfID);
 				System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
 				scanner.nextLine();
 				listShelfScreen();
