@@ -81,6 +81,21 @@ public abstract class Utils {
 			}
 		}
 	}
+	
+	/*public static <T extends EntityRepository<Entity>> Integer validate(Scanner scanner, String text, T entityList){
+		Integer ID = null;
+		while (true) {
+			ID = validate(0, Collections.max(entityList.keySet()), scanner, text);
+			if(ID==0){
+				return ID;
+			}
+			if (entityList.containsKey(ID)) {
+				return ID;
+			}else{
+				System.out.println("Por favor escolha uma opção válida!");
+			}
+		}
+	}*/
 
 	public static Integer[] validateIntArray(Scanner scanner, String text){
 		while(true){

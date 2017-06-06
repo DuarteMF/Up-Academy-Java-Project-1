@@ -166,7 +166,9 @@ public class TextInterface {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a alterar:");
 
-			Integer productID = Utils.validate(scanner, text, "product");
+			Integer productID = Utils.validate(scanner, text, "product");			
+//			Integer productID = Utils.validate(scanner, text, productList);
+
 			if (productID == 0) {
 				listProductScreen();
 			} else {
