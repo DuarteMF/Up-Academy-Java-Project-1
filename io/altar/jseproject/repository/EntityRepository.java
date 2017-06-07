@@ -43,6 +43,18 @@ public class EntityRepository<E extends Entity> {
 	public void displayElement(Integer key){
 		System.out.println(entityList.get(key).toString());
 	}
+	
+	public String getList(String listType){
+		String text = String.format("Lista de %s:\n", listType);
+		if (!entityList.isEmpty()) {
+			for (Integer ID : entityList.keySet()) {
+				text += entityList.get(ID).toString();
+			}
+		} else {
+			text += "Vazia!\n";
+		}
+		return text;
+	}
 }
 
 

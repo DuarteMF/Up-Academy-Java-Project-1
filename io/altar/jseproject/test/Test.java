@@ -9,6 +9,7 @@ public class Test {
 //		Scanner scanner = new Scanner(System.in);
 //		String stored = scanner.nextLine();
 //	    System.out.println(String.format("%s: %g", "teste", 5.0));
-//	    System.out.println(Integer.parseInt(stored));
+//		Integer[] teste = null;
+//	    System.out.println(Arrays.toString(teste));
 	}
 }

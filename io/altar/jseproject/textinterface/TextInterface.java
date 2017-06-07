@@ -1,5 +1,6 @@
 package io.altar.jseproject.textinterface;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import io.altar.jseproject.model.Product;
@@ -127,7 +128,7 @@ public class TextInterface {
 			Integer[] shelfIDArray = null;
 			if (!shelfList.keySet().isEmpty()) {
 				System.out.println(
-						"Por favor indique a lista de prateleiras em que o produto está exposto (separado por virgulas):");
+						"Por favor indique a lista de prateleiras em que o produto está exposto, separado por virgulas (pode deixar em branco):");
 				String text = "Lista de prateleiras:\n";
 				for (int ID : shelfList.keySet()) {
 					text += shelfList.get(ID).toString();
@@ -174,10 +175,18 @@ public class TextInterface {
 				if (productID == 0) {
 					listProductScreen();
 				} else {
-					System.out.println("Este produto existe nas seguintes prateleiras: ");
+					Integer[] shelfIDArray = null;
+					if (!shelfList.isEmpty()) {
+						System.out.println(shelfList.getList("shelf"));
+						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", Arrays.toString(((Product) productList.get(productID)).getShelfIdLocation())));
+						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"));
+						if(shelfIDArray==null){
+							shelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
+						}
+					}
 
 					System.out.println(String.format(
-							"Este produto tem o seguinte desconto: %d%% \nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							"Este produto tem o seguinte desconto: %d%%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
 							((Product) productList.get(productID)).getDiscount()));
 					String discount = Utils.validate(scanner, true, "integer");
 					Integer newDiscount = ((Product) productList.get(productID)).getDiscount();
@@ -215,7 +224,7 @@ public class TextInterface {
 						newSalePrice = Double.parseDouble(salePrice);
 					}
 
-					ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
+					ProductRepository.alterElement(productID, shelfIDArray, newDiscount, newTax, newSalePrice);
 
 					listProductScreen();
 				}
@@ -326,6 +335,17 @@ public class TextInterface {
 				if (shelfID == 0) {
 					listShelfScreen();
 				} else {
+					Integer shelfProductID = null;
+					if (!productList.isEmpty()) {
+						System.out.println(productList.getList("product"));
+						System.out.println(String.format("Esta prateleira contém o seguinte produto: %d\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", ((Shelf) shelfList.get(shelfID)).getProductID()));
+						shelfProductID = Utils.validate(scanner, productList.getList("product"), "product");
+						if(shelfProductID==null){
+							shelfProductID = ((Shelf) shelfList.get(shelfID)).getProductID();
+						}
+					}
+					
+					
 					System.out.println("Esta prateleira contém os seguintes produtos: ");
 
 					System.out.println(String.format(
