@@ -162,102 +162,119 @@ public class TextInterface {
 	}
 
 	public static void alterProduct(String text) {
-		if(!productList.isEmpty()){
-		boolean correctVAT = false;
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Por favor indique a ID do produto a alterar:");
+		if (!productList.isEmpty()) {
+			boolean correctVAT = false;
+			try (Scanner scanner = new Scanner(System.in)) {
+				System.out.println("Por favor indique a ID do produto a alterar:");
 
-			Integer productID = Utils.validate(scanner, text, "product");			
-//			Integer productID = Utils.validate(scanner, text, productList);
+				Integer productID = Utils.validate(scanner, text, "product");
+				// Integer productID = Utils.validate(scanner, text,
+				// productList);
 
-			if (productID == 0) {
-				listProductScreen();
-			} else {
-				System.out.println("Este produto existe nas seguintes prateleiras: ");
+				if (productID == 0) {
+					listProductScreen();
+				} else {
+					System.out.println("Este produto existe nas seguintes prateleiras: ");
 
-				System.out.println(String.format("Este produto tem o seguinte desconto: %d%% \nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getDiscount()));
-				String discount = Utils.validate(scanner, true, "integer");
-				Integer newDiscount = ((Product) productList.get(productID)).getDiscount();
-				if (discount != null) {
-					newDiscount = Integer.parseInt(discount);
-				}
-
-				Integer newTax = null;
-				while (!correctVAT) {
-					System.out.println(String.format("Este produto tem o seguinte imposto: %d%%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getTax()));
-					String tax = Utils.validate(scanner, true, "integer");
-					newTax = ((Product) productList.get(productID)).getTax();
-					if (tax != null) {
-						newTax = Integer.parseInt(tax);
-						switch (newTax) {
-						case 6:
-						case 13:
-						case 23:
-							correctVAT = true;
-							break;
-						}
-					} else {
-						correctVAT = true;
+					System.out.println(String.format(
+							"Este produto tem o seguinte desconto: %d%% \nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							((Product) productList.get(productID)).getDiscount()));
+					String discount = Utils.validate(scanner, true, "integer");
+					Integer newDiscount = ((Product) productList.get(productID)).getDiscount();
+					if (discount != null) {
+						newDiscount = Integer.parseInt(discount);
 					}
+
+					Integer newTax = null;
+					while (!correctVAT) {
+						System.out.println(String.format(
+								"Este produto tem o seguinte imposto: %d%%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+								((Product) productList.get(productID)).getTax()));
+						String tax = Utils.validate(scanner, true, "integer");
+						newTax = ((Product) productList.get(productID)).getTax();
+						if (tax != null) {
+							newTax = Integer.parseInt(tax);
+							switch (newTax) {
+							case 6:
+							case 13:
+							case 23:
+								correctVAT = true;
+								break;
+							}
+						} else {
+							correctVAT = true;
+						}
+					}
+
+					System.out.println(String.format(
+							"Este produto tem o seguinte preço: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							((Product) productList.get(productID)).getSalePrice()));
+					String salePrice = Utils.validate(scanner, true, "double");
+					Double newSalePrice = ((Product) productList.get(productID)).getSalePrice();
+					if (salePrice != null) {
+						newSalePrice = Double.parseDouble(salePrice);
+					}
+
+					ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
+
+					listProductScreen();
 				}
-
-				System.out.println(String.format("Este produto tem o seguinte preço: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getSalePrice()));
-				String salePrice = Utils.validate(scanner, true, "double");
-				Double newSalePrice = ((Product) productList.get(productID)).getSalePrice();
-				if (salePrice != null) {
-					newSalePrice = Double.parseDouble(salePrice);
-				}
-
-				ProductRepository.alterElement(productID, newDiscount, newTax, newSalePrice);
-
-				listProductScreen();
 			}
-		}
-		}else{
+		} else {
 			System.out.println("A lista de produtos está vazia, não há produtos a editar");
 			listProductScreen();
 		}
 	}
 
 	public static void seeProductDetails(String text) {
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Por favor indique a ID do produto a consultar:");
+		if (!productList.isEmpty()) {
+			try (Scanner scanner = new Scanner(System.in)) {
+				System.out.println("Por favor indique a ID do produto a consultar:");
 
-			Integer productID = Utils.validate(scanner, text, "product");
-			if (productID == 0) {
-				listProductScreen();
-			} else {
-				productList.displayElement(productID);
-				System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
-				scanner.nextLine();
-				listProductScreen();
+				Integer productID = Utils.validate(scanner, text, "product");
+				if (productID == 0) {
+					listProductScreen();
+				} else {
+					productList.displayElement(productID);
+					System.out.println("Por favor prima ENTER para voltar ao ecrã dos produtos");
+					scanner.nextLine();
+					listProductScreen();
+				}
 			}
+		} else {
+			System.out.println("A lista de produtos está vazia, não há produtos para consultar");
+			listProductScreen();
 		}
 	}
 
 	public static void removeProduct(String text) {
-		try (Scanner scanner = new Scanner(System.in)) {
+		if (!productList.isEmpty()) {
+			try (Scanner scanner = new Scanner(System.in)) {
 
-			System.out.println("Por favor indique a ID do produto a remover:");
-			Integer productID = Utils.validate(scanner, text, "product");
-			if (productID == 0) {
-				listProductScreen();
-			} else {
-				System.out.println("Este é o produto que escolheu:");
-				System.out.println(productList.get(productID).toString());
-				System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
-				while (true) {
-					String response = scanner.nextLine();
-					if (response.equals("s")) {
-						productList.removeElement(productID);
-						listProductScreen();
-					} else if (response.equals("n")) {
-						listProductScreen();
-					} else {
-						System.out.println("Por favor prima s ou n");
+				System.out.println("Por favor indique a ID do produto a remover:");
+				Integer productID = Utils.validate(scanner, text, "product");
+				if (productID == 0) {
+					listProductScreen();
+				} else {
+					System.out.println("Este é o produto que escolheu:");
+					System.out.println(productList.get(productID).toString());
+					System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
+					while (true) {
+						String response = scanner.nextLine();
+						if (response.equals("s")) {
+							productList.removeElement(productID);
+							listProductScreen();
+						} else if (response.equals("n")) {
+							listProductScreen();
+						} else {
+							System.out.println("Por favor prima s ou n");
+						}
 					}
 				}
 			}
+		} else {
+			System.out.println("A lista de produtos está vazia, não há produtos para eliminar");
+			listProductScreen();
 		}
 	}
 
@@ -300,85 +317,106 @@ public class TextInterface {
 	}
 
 	public static void alterShelf(String text) {
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Por favor indique a ID da prateleira a alterar:");
+		if (!shelfList.isEmpty()) {
+			try (Scanner scanner = new Scanner(System.in)) {
+				System.out.println("Por favor indique a ID da prateleira a alterar:");
 
-			Integer shelfID = Utils.validate(scanner, text, "shelf");
+				Integer shelfID = Utils.validate(scanner, text, "shelf");
 
-			if (shelfID == 0) {
-				listShelfScreen();
-			} else {
-				System.out.println("Esta prateleira contém os seguintes produtos: ");
+				if (shelfID == 0) {
+					listShelfScreen();
+				} else {
+					System.out.println("Esta prateleira contém os seguintes produtos: ");
 
-				System.out.println(String.format("Esta prateleira tem a seguinte localização: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getLocation()));
-				String location = Utils.validate(scanner, true, "integer");
-				Integer newLocation = ((Shelf) shelfList.get(shelfID)).getLocation();
-				if (location != null) {
-					newLocation = Integer.parseInt(location);
+					System.out.println(String.format(
+							"Esta prateleira tem a seguinte localização: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							((Shelf) shelfList.get(shelfID)).getLocation()));
+					String location = Utils.validate(scanner, true, "integer");
+					Integer newLocation = ((Shelf) shelfList.get(shelfID)).getLocation();
+					if (location != null) {
+						newLocation = Integer.parseInt(location);
+					}
+
+					System.out.println(String.format(
+							"Esta prateleira tem a seguinte capacidade: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							((Shelf) shelfList.get(shelfID)).getCapacity()));
+					String capacity = Utils.validate(scanner, true, "integer");
+					Integer newCapacity = ((Shelf) shelfList.get(shelfID)).getCapacity();
+					if (capacity != null) {
+						newCapacity = Integer.parseInt(capacity);
+					}
+
+					System.out.println(String.format(
+							"Esta prateleira tem o seguinte preço de aluguer: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
+							((Shelf) shelfList.get(shelfID)).getLocationRentalPrice()));
+					String locationRentalPrice = Utils.validate(scanner, true, "double");
+					Double newLocationRentalPrice = ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice();
+					if (locationRentalPrice != null) {
+						newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
+					}
+
+					ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
+
+					listShelfScreen();
 				}
-
-				System.out.println(String.format("Esta prateleira tem a seguinte capacidade: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getCapacity()));
-				String capacity = Utils.validate(scanner, true, "integer");
-				Integer newCapacity = ((Shelf) shelfList.get(shelfID)).getCapacity();
-				if (capacity != null) {
-					newCapacity = Integer.parseInt(capacity);
-				}
-
-				System.out.println(String.format("Esta prateleira tem o seguinte preço de aluguer: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice()));
-				String locationRentalPrice = Utils.validate(scanner, true, "double");
-				Double newLocationRentalPrice = ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice();
-				if (locationRentalPrice != null) {
-					newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
-				}
-
-				ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
-
-				listShelfScreen();
 			}
+		} else {
+			System.out.println("A lista de prateleiras está vazia, não há prateleiras a editar");
+			listShelfScreen();
 		}
 	}
 
 	public static void seeShelfDetails(String text) {
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Por favor indique a ID da prateleira a consultar:");
+		if (!shelfList.isEmpty()) {
+			try (Scanner scanner = new Scanner(System.in)) {
+				System.out.println("Por favor indique a ID da prateleira a consultar:");
 
-			Integer shelfID = Utils.validate(scanner, text, "shelf");
+				Integer shelfID = Utils.validate(scanner, text, "shelf");
 
-			if (shelfID == 0) {
-				listShelfScreen();
-			} else {
-				shelfList.displayElement(shelfID);
-				System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
-				scanner.nextLine();
-				listShelfScreen();
+				if (shelfID == 0) {
+					listShelfScreen();
+				} else {
+					shelfList.displayElement(shelfID);
+					System.out.println("Por favor prima ENTER para voltar ao ecrã das prateleiras");
+					scanner.nextLine();
+					listShelfScreen();
+				}
 			}
+		} else {
+			System.out.println("A lista de prateleiras está vazia, não há prateleiras a consultar");
+			listShelfScreen();
 		}
 	}
 
 	public static void removeShelf(String text) {
-		try (Scanner scanner = new Scanner(System.in)) {
+		if (!shelfList.isEmpty()) {
+			try (Scanner scanner = new Scanner(System.in)) {
 
-			System.out.println("Por favor indique a ID da prateleira a remover:");
-			Integer shelfID = Utils.validate(scanner, text, "shelf");
+				System.out.println("Por favor indique a ID da prateleira a remover:");
+				Integer shelfID = Utils.validate(scanner, text, "shelf");
 
-			if (shelfID == 0) {
-				listShelfScreen();
-			} else {
-				System.out.println("Este é a prateleira que escolheu:");
-				System.out.println(shelfList.get(shelfID).toString());
-				System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
-				while (true) {
-					String response = scanner.nextLine();
-					if (response.equals("s")) {
-						shelfList.removeElement(shelfID);
-						listShelfScreen();
-					} else if (response.equals("n")) {
-						listShelfScreen();
-					} else {
-						System.out.println("Por favor prima s ou n");
+				if (shelfID == 0) {
+					listShelfScreen();
+				} else {
+					System.out.println("Este é a prateleira que escolheu:");
+					System.out.println(shelfList.get(shelfID).toString());
+					System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
+					while (true) {
+						String response = scanner.nextLine();
+						if (response.equals("s")) {
+							shelfList.removeElement(shelfID);
+							listShelfScreen();
+						} else if (response.equals("n")) {
+							listShelfScreen();
+						} else {
+							System.out.println("Por favor prima s ou n");
+						}
 					}
 				}
 			}
+		} else {
+			System.out.println("A lista de prateleiras está vazia, não há prateleiras a remover");
+			listShelfScreen();
 		}
 	}
 }
