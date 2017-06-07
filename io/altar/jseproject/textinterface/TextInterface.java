@@ -257,7 +257,7 @@ public class TextInterface {
 					listProductScreen();
 				} else {
 					System.out.println("Este é o produto que escolheu:");
-					System.out.println(productList.get(productID).toString());
+					productList.displayElement(productID);
 					System.out.println("De certeza que o quer apagar? (prima s para Sim e n para Não)");
 					while (true) {
 						String response = scanner.nextLine();
@@ -399,7 +399,7 @@ public class TextInterface {
 					listShelfScreen();
 				} else {
 					System.out.println("Este é a prateleira que escolheu:");
-					System.out.println(shelfList.get(shelfID).toString());
+					shelfList.displayElement(shelfID);
 					System.out.println("De certeza que a quer apagar? (prima s para Sim e n para Não)");
 					while (true) {
 						String response = scanner.nextLine();
