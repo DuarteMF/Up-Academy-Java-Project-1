@@ -24,7 +24,7 @@ public abstract class Utils {
 					System.out.println("Por favor escolha uma opção válida!");
 					System.out.println(text);
 				}
-			}catch(Exception e){
+			}catch(NumberFormatException e){
 				System.out.println("Por favor escolha uma opção válida!");
 				System.out.println(text);
 			}
@@ -53,7 +53,7 @@ public abstract class Utils {
 					}
 					
 				}
-				catch(Exception e){
+				catch(NumberFormatException e){
 					System.out.println("Por favor escolha uma opção válida!");
 				}
 			}
@@ -108,7 +108,7 @@ public abstract class Utils {
 						integerArray[i] = Integer.parseInt(inputArray[i]);
 					}
 					return integerArray;
-				} catch (Exception e) {
+				} catch (NumberFormatException e) {
 					System.out.println("Por favor escolha uma opção válida!");
 					System.out.println(text);
 				}
