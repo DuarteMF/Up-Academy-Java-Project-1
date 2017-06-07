@@ -162,6 +162,7 @@ public class TextInterface {
 	}
 
 	public static void alterProduct(String text) {
+		if(!productList.isEmpty()){
 		boolean correctVAT = false;
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Por favor indique a ID do produto a alterar:");
@@ -174,9 +175,7 @@ public class TextInterface {
 			} else {
 				System.out.println("Este produto existe nas seguintes prateleiras: ");
 
-				System.out.println("Este produto tem o seguinte desconto: "
-						+ ((Product) productList.get(productID)).getDiscount()
-						+ "%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				System.out.println(String.format("Este produto tem o seguinte desconto: %d%% \nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getDiscount()));
 				String discount = Utils.validate(scanner, true, "integer");
 				Integer newDiscount = ((Product) productList.get(productID)).getDiscount();
 				if (discount != null) {
@@ -185,9 +184,7 @@ public class TextInterface {
 
 				Integer newTax = null;
 				while (!correctVAT) {
-					System.out.println("Este produto tem o seguinte imposto: "
-							+ ((Product) productList.get(productID)).getTax()
-							+ "%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+					System.out.println(String.format("Este produto tem o seguinte imposto: %d%%\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getTax()));
 					String tax = Utils.validate(scanner, true, "integer");
 					newTax = ((Product) productList.get(productID)).getTax();
 					if (tax != null) {
@@ -204,9 +201,7 @@ public class TextInterface {
 					}
 				}
 
-				System.out.println("Este produto tem o seguinte preço: "
-						+ ((Product) productList.get(productID)).getSalePrice()
-						+ "€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				System.out.println(String.format("Este produto tem o seguinte preço: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Product) productList.get(productID)).getSalePrice()));
 				String salePrice = Utils.validate(scanner, true, "double");
 				Double newSalePrice = ((Product) productList.get(productID)).getSalePrice();
 				if (salePrice != null) {
@@ -217,6 +212,10 @@ public class TextInterface {
 
 				listProductScreen();
 			}
+		}
+		}else{
+			System.out.println("A lista de produtos está vazia, não há produtos a editar");
+			listProductScreen();
 		}
 	}
 
@@ -311,27 +310,21 @@ public class TextInterface {
 			} else {
 				System.out.println("Esta prateleira contém os seguintes produtos: ");
 
-				System.out.println("Esta prateleira tem a seguinte localização: "
-						+ ((Shelf) shelfList.get(shelfID)).getLocation()
-						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				System.out.println(String.format("Esta prateleira tem a seguinte localização: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getLocation()));
 				String location = Utils.validate(scanner, true, "integer");
 				Integer newLocation = ((Shelf) shelfList.get(shelfID)).getLocation();
 				if (location != null) {
 					newLocation = Integer.parseInt(location);
 				}
 
-				System.out.println("Esta prateleira tem a seguinte capacidade: "
-						+ ((Shelf) shelfList.get(shelfID)).getCapacity()
-						+ "\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				System.out.println(String.format("Esta prateleira tem a seguinte capacidade: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getCapacity()));
 				String capacity = Utils.validate(scanner, true, "integer");
 				Integer newCapacity = ((Shelf) shelfList.get(shelfID)).getCapacity();
 				if (capacity != null) {
 					newCapacity = Integer.parseInt(capacity);
 				}
 
-				System.out.println("Esta prateleira tem o seguinte preço de aluguer: "
-						+ ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice()
-						+ "€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):");
+				System.out.println(String.format("Esta prateleira tem o seguinte preço de aluguer: %.2f€\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):", ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice()));
 				String locationRentalPrice = Utils.validate(scanner, true, "double");
 				Double newLocationRentalPrice = ((Shelf) shelfList.get(shelfID)).getLocationRentalPrice();
 				if (locationRentalPrice != null) {

@@ -8,7 +8,7 @@ public class Test {
 				
 //		Scanner scanner = new Scanner(System.in);
 //		String stored = scanner.nextLine();
-//	    System.out.println(stored);
+//	    System.out.println(String.format("%s: %g", "teste", 5.0));
 //	    System.out.println(Integer.parseInt(stored));
 	}
 }
