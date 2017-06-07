@@ -44,3 +44,5 @@ public class EntityRepository<E extends Entity> {
 		System.out.println(entityList.get(key).toString());
 	}
 }
+
+

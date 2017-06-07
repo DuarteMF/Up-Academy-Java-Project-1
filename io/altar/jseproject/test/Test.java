@@ -7,7 +7,8 @@ public class Test {
 		TextInterface.firstScreen();
 				
 //		Scanner scanner = new Scanner(System.in);
-//	    System.out.println(Utils.validate(scanner, "teste product", "product"));
-//	    System.out.println(Utils.validate(scanner, "teste shelf", "shelf"));
+//		String stored = scanner.nextLine();
+//	    System.out.println(stored);
+//	    System.out.println(Integer.parseInt(stored));
 	}
 }

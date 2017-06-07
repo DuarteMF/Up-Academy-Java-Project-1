@@ -17,3 +17,13 @@ public class ProductRepository extends EntityRepository<Product> {
 		((Product)ProductRepository.getInstance().get(id)).setSalePrice(price);
 	}
 }
+
+//public enum ProductRepository extends EntityRepository<Product> {
+//	INSTANCE;
+//
+//	public static void alterElement(Integer id, Integer discount, Integer tax, Double price) {
+//		((Product)INSTANCE.get(id)).setDiscount(discount);
+//		((Product)INSTANCE.get(id)).setTax(tax);
+//		((Product)INSTANCE.get(id)).setSalePrice(price);
+//	}
+//}
