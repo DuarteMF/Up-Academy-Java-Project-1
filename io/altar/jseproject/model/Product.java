@@ -62,7 +62,7 @@ public class Product extends Entity{
 	
 	@Override
 	public String toString(){
-		return String.format("| ID: %d |Nome: %s | Prateleiras: %s | Desconto: %d%%| IVA: %d%%| PVP: %.2f€|\n", getId(), name, Arrays.toString(shelfIdLocation), discount, tax, salePrice);
+		return String.format("| ID: %d |Nome: %s | Prateleiras: %s | Desconto: %d%% | IVA: %d%% | PVP: %.2f€ |\n", getId(), name, Arrays.toString(shelfIdLocation), discount, tax, salePrice);
 	}
 	
 }

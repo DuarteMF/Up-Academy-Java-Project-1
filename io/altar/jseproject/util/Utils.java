@@ -1,5 +1,6 @@
 package io.altar.jseproject.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -116,6 +117,18 @@ public abstract class Utils {
 				return null;
 			}
 		}
+	}
+	
+	public static Integer[] emptyShelves(ShelfRepository shelfList){
+		ArrayList<Integer> List = new ArrayList<>();
+		for(Integer id: shelfList.keySet()){
+			if(((Shelf) shelfList.get(id)).getProductID()==null){
+				List.add(id);
+			}
+		}
+		Integer[] emptyList = new Integer[List.size()];
+		List.toArray(emptyList);
+		return emptyList;
 	}
 	
 }

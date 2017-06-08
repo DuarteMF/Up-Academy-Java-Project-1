@@ -1,5 +1,6 @@
 package io.altar.jseproject.repository;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -34,6 +35,10 @@ public class EntityRepository<E extends Entity> {
 	
 	public Set<Integer> keySet(){
 		return entityList.keySet();
+	}
+	
+	public Collection<Entity> values(){
+		return entityList.values();
 	}
 	
 	public boolean containsKey(Integer key){
