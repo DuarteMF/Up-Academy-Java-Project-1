@@ -136,6 +136,9 @@ public class TextInterface {
 				System.out.println(text);
 				shelfIDArray = Utils.validateIntArray(scanner, text);
 			}
+			
+			System.out.println("Por favor indique o nome do produto:");
+			String name = scanner.nextLine();
 
 			System.out.println("Por favor indique o valor unitário de desconto, em percentagem:");
 			Integer discount = Integer.parseInt(Utils.validate(scanner, false, "integer"));
@@ -156,7 +159,7 @@ public class TextInterface {
 			System.out.println("Por favor indique o Preço de Venda ao Público:");
 			Double salePrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
-			new Product(shelfIDArray, discount, valueAddedTax, salePrice);
+			new Product(shelfIDArray, name, discount, valueAddedTax, salePrice);
 
 			listProductScreen();
 		}
@@ -183,6 +186,14 @@ public class TextInterface {
 						if(shelfIDArray==null){
 							shelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
 						}
+					}
+					
+					System.out.println(String.format(
+							"Este produto tem o seguinte nome: %s\nInsira o novo nome (se não inserir será mantido o nome inicial):",
+							((Product) productList.get(productID)).getName()));
+					String name = scanner.nextLine();
+					if (name.isEmpty()) {
+						name = ((Product) productList.get(productID)).getName();
 					}
 
 					System.out.println(String.format(
@@ -224,7 +235,7 @@ public class TextInterface {
 						newSalePrice = Double.parseDouble(salePrice);
 					}
 
-					ProductRepository.alterElement(productID, shelfIDArray, newDiscount, newTax, newSalePrice);
+					ProductRepository.alterElement(productID, shelfIDArray, name, newDiscount, newTax, newSalePrice);
 
 					listProductScreen();
 				}

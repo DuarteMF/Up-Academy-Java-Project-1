@@ -6,12 +6,17 @@ import io.altar.jseproject.repository.ProductRepository;
 
 public class Product extends Entity{
 	private Integer [] shelfIdLocation;
+	private String name;
 	private Integer discount;
 	private Integer tax;
 	private Double salePrice;	
 	
 	public void setShelfIdLocation(Integer [] shelfIdLocation){
 		this.shelfIdLocation = shelfIdLocation;
+	}
+	
+	public void setName(String name){
+		this.name = name;
 	}
 	
 	public void setDiscount(Integer discount){
@@ -30,6 +35,10 @@ public class Product extends Entity{
 		return this.shelfIdLocation;
 	}
 	
+	public String getName(){
+		return this.name;
+	}
+	
 	public Integer getDiscount(){
 		return this.discount;
 	}
@@ -42,8 +51,9 @@ public class Product extends Entity{
 		return this.salePrice;
 	}
 	
-	public Product(Integer[] shelfIdLocation, Integer discount, Integer tax, Double salePrice){
+	public Product(Integer[] shelfIdLocation, String name, Integer discount, Integer tax, Double salePrice){
 		this.shelfIdLocation = shelfIdLocation;
+		this.name = name;
 		this.discount = discount;
 		this.tax = tax;
 		this.salePrice = salePrice;
@@ -52,7 +62,7 @@ public class Product extends Entity{
 	
 	@Override
 	public String toString(){
-		return "| ID: " + getId() + "| Shelves: " + Arrays.toString(shelfIdLocation) + "| Discount: " + discount + "%| Tax: " + tax + "%| Sale Price: " + salePrice + "€|\n";
+		return String.format("| ID: %d |Nome: %s | Prateleiras: %s | Desconto: %d%%| IVA: %d%%| PVP: %.2f€|\n", getId(), name, Arrays.toString(shelfIdLocation), discount, tax, salePrice);
 	}
 	
 }
