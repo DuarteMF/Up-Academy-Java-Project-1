@@ -132,7 +132,7 @@ public class TextInterface {
 				System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
 				System.out.println(
 						"Por favor indique a lista de prateleiras em que o produto está exposto, separado por virgulas (pode deixar em branco):");
-				shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"));
+				shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
 			}
 			
 			System.out.println("Por favor indique o nome do produto:");
@@ -157,7 +157,12 @@ public class TextInterface {
 			System.out.println("Por favor indique o Preço de Venda ao Público:");
 			Double salePrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
-			new Product(shelfIDArray, name, discount, valueAddedTax, salePrice);
+			Product newProduct = new Product(shelfIDArray, name, discount, valueAddedTax, salePrice);
+			if(shelfIDArray!=null){
+				for (Integer shelfID : shelfIDArray) {
+					ShelfRepository.toggleProductPresent(shelfID, newProduct.getId());
+				}
+			}
 
 			listProductScreen();
 		}
@@ -178,14 +183,21 @@ public class TextInterface {
 				} else {
 					Integer[] shelfIDArray = null;
 					Integer[] emptyShelves = Utils.emptyShelves(shelfList);
-					if (!shelfList.isEmpty() && !(emptyShelves.length == 0)) {
+					if (!shelfList.isEmpty()) {
 						System.out.println(shelfList.getList("shelf"));
 						System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
 						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", Arrays.toString(((Product) productList.get(productID)).getShelfIdLocation())));
-						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"));
-//						if(shelfIDArray==null){
-//							shelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
-//						}
+						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
+						if(shelfIDArray==null){
+							Integer[] tempShelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
+							for(Integer shelfID: tempShelfIDArray){
+								ShelfRepository.toggleProductPresent(shelfID, productID);
+							}
+						}else{
+							for(Integer shelfID: shelfIDArray){
+								ShelfRepository.toggleProductPresent(shelfID, productID);
+							}
+						}						
 					}
 					
 					System.out.println(String.format(

@@ -50,6 +50,6 @@ public class Shelf extends Entity{
 	
 	@Override
 	public String toString(){
-		return String.format("| ID: %d |Localização: %d | Capacidade: %d | ID do Produto: %d | Preço de Aluguer: %.2f€|\n", getId(), location, capacity, productID, locationRentalPrice);
+		return String.format("| ID: %d | Localização: %d | Capacidade: %d | ID do Produto: %d | Preço de Aluguer: %.2f€|\n", getId(), location, capacity, productID, locationRentalPrice);
 	}
 }

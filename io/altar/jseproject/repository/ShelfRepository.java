@@ -16,4 +16,12 @@ public class ShelfRepository extends EntityRepository<Shelf> {
 		((Shelf)ShelfRepository.getInstance().get(id)).setCapacity(capacity);
 		((Shelf)ShelfRepository.getInstance().get(id)).setLocationRentalPrice(price);
 	}
+	
+	public static void toggleProductPresent(Integer id, Integer productID) {
+		if(((Shelf)ShelfRepository.getInstance().get(id)).getProductID()==null){
+			((Shelf)ShelfRepository.getInstance().get(id)).setProductID(productID);
+		}else{
+			((Shelf)ShelfRepository.getInstance().get(id)).setProductID(null);
+		}
+	}
 }

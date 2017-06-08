@@ -17,112 +17,106 @@ public abstract class Utils {
 		String stored = "";
 		while (true) {
 			stored = scanner.nextLine();
-			try{
+			try {
 				inputValue = Integer.parseInt(stored);
 				if ((inputValue >= min && inputValue <= max)) {
 					return inputValue;
-				}else{
+				} else {
 					System.out.println("Por favor escolha uma opção válida!");
 					System.out.println(text);
 				}
-			}catch(NumberFormatException e){
+			} catch (NumberFormatException e) {
 				System.out.println("Por favor escolha uma opção válida!");
 				System.out.println(text);
 			}
 		}
 	}
 
-	public static String validate(Scanner scanner, boolean emptyAllowed, String dataType) {	
+	public static String validate(Scanner scanner, boolean emptyAllowed, String dataType) {
 		String stored = "";
 		while (true) {
 			stored = scanner.nextLine();
 			if (stored.isEmpty()) {
-				if(emptyAllowed){
+				if (emptyAllowed) {
 					return null;
-				}else{
+				} else {
 					System.out.println("Por favor escolha uma opção válida!");
 				}
-			}			
-			else {
-				try{
-					if(dataType.equals("integer")){
+			} else {
+				try {
+					if (dataType.equals("integer")) {
 						Integer.parseInt(stored);
 						return stored;
-					}else if(dataType.equals("double")){
+					} else if (dataType.equals("double")) {
 						Double.parseDouble(stored);
 						return stored;
 					}
-					
-				}
-				catch(NumberFormatException e){
+
+				} catch (NumberFormatException e) {
 					System.out.println("Por favor escolha uma opção válida!");
 				}
 			}
 
 		}
 	}
-	
-	public static Integer validate(Scanner scanner, String text, String entityType){
+
+	public static Integer validate(Scanner scanner, String text, String entityType) {
 		Integer ID = null;
 		EntityRepository<? extends Entity> entityList = null;
-		if(entityType.equals("product")){
-			entityList = (EntityRepository<Product>)ProductRepository.getInstance();
-		}else if(entityType.equals("shelf")){
-			entityList = (EntityRepository<Shelf>)ShelfRepository.getInstance();
+		if (entityType.equals("product")) {
+			entityList = (EntityRepository<Product>) ProductRepository.getInstance();
+		} else if (entityType.equals("shelf")) {
+			entityList = (EntityRepository<Shelf>) ShelfRepository.getInstance();
 		}
 		while (true) {
 			ID = validate(0, Collections.max(entityList.keySet()), scanner, text);
-			if(ID==0){
+			if (ID == 0) {
 				return ID;
 			}
 			if (entityList.containsKey(ID)) {
 				return ID;
-			}else{
+			} else {
 				System.out.println("Por favor escolha uma opção válida!");
 			}
 		}
 	}
-	
-	/*public static <T extends EntityRepository<Entity>> Integer validate(Scanner scanner, String text, T entityList){
-		Integer ID = null;
-		while (true) {
-			ID = validate(0, Collections.max(entityList.keySet()), scanner, text);
-			if(ID==0){
-				return ID;
-			}
-			if (entityList.containsKey(ID)) {
-				return ID;
-			}else{
-				System.out.println("Por favor escolha uma opção válida!");
-			}
-		}
-	}*/
 
-	public static Integer[] validateIntArray(Scanner scanner, String text){
-		while(true){
+	/*
+	 * public static <T extends EntityRepository<Entity>> Integer
+	 * validate(Scanner scanner, String text, T entityList){ Integer ID = null;
+	 * while (true) { ID = validate(0, Collections.max(entityList.keySet()),
+	 * scanner, text); if(ID==0){ return ID; } if (entityList.containsKey(ID)) {
+	 * return ID; }else{
+	 * System.out.println("Por favor escolha uma opção válida!"); } } }
+	 */
+
+	public static Integer[] validateIntArray(Scanner scanner, String text, Integer[] emptyShelves) {
+		while (true) {
 			String input = scanner.nextLine();
-			if(!input.isEmpty()){
+			if (!input.isEmpty()) {
 				String[] inputArray = input.split(",\\s*"); // regex -> \\s*
 				Integer[] integerArray = new Integer[inputArray.length];
 				try {
 					for (int i = 0; i < inputArray.length; i++) {
 						integerArray[i] = Integer.parseInt(inputArray[i]);
 					}
-					return integerArray;
+					if(validate(integerArray, emptyShelves)){
+						return integerArray;
+					}
 				} catch (NumberFormatException e) {
 					System.out.println("Por favor escolha uma opção válida!");
 					System.out.println(text);
 				}
-			}else{
+			} else {
 				return null;
 			}
 		}
 	}
-	
-	public static Integer[] emptyShelves(ShelfRepository shelfList){
+
+	public static Integer[] emptyShelves(ShelfRepository shelfList) {
 		ArrayList<Integer> List = new ArrayList<>();
-		for(Integer id: shelfList.keySet()){
-			if(((Shelf) shelfList.get(id)).getProductID()==null){
+		for (Integer id : shelfList.keySet()) {
+			if (((Shelf) shelfList.get(id)).getProductID() == null) {
 				List.add(id);
 			}
 		}
@@ -130,5 +124,29 @@ public abstract class Utils {
 		List.toArray(emptyList);
 		return emptyList;
 	}
-	
+
+	public static boolean validate(Integer[] array1, Integer[] parentArray) {
+		boolean exitWhile = false;
+		if (array1 != null && parentArray != null) {
+			int i = 0;
+			while (!exitWhile && i < array1.length) {
+				boolean existsInParent = false;
+				for (int j = 0; j < parentArray.length; j++) {
+					if (array1[i] == parentArray[j]) {
+						existsInParent = true;
+						break;
+					}
+				}
+				exitWhile = !existsInParent;
+				i++;
+			}
+		}
+		if(exitWhile){
+			return false;
+		}else{
+			return true;
+		}
+		
+	}
+
 }
