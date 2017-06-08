@@ -126,8 +126,8 @@ public class TextInterface {
 		boolean correctVAT = false;
 		try (Scanner scanner = new Scanner(System.in)) {
 			Integer[] shelfIDArray = null;
-			Integer[] emptyShelves = Utils.emptyShelves(shelfList);
-			if (!shelfList.keySet().isEmpty() && !(emptyShelves.length == 0)) {
+			Integer[] emptyShelves = Utils.emptyShelves();
+			if (!shelfList.keySet().isEmpty() && emptyShelves.length != 0) {
 				System.out.println(shelfList.getList("shelf"));
 				System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
 				System.out.println(
@@ -182,11 +182,11 @@ public class TextInterface {
 					listProductScreen();
 				} else {
 					Integer[] shelfIDArray = null;
-					Integer[] emptyShelves = Utils.emptyShelves(shelfList);
+					Integer[] emptyShelves = Utils.emptyShelves();
 					if (!shelfList.isEmpty()) {
 						System.out.println(shelfList.getList("shelf"));
 						System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
-						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", Arrays.toString(((Product) productList.get(productID)).getShelfIdLocation())));
+						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", Arrays.toString(((Product) productList.get(productID)).getShelfIdLocation())));
 						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
 						if(shelfIDArray==null){
 							Integer[] tempShelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
@@ -321,19 +321,13 @@ public class TextInterface {
 			Integer capacity = Integer.parseInt(Utils.validate(scanner, false, "integer"));
 
 			Integer productID = null;
-			if (!productList.keySet().isEmpty()) {
+			Integer[] unassignedProducts = Utils.unassignedProducts();
+			if (!productList.keySet().isEmpty() && unassignedProducts.length != 0) {
+				System.out.println(productList.getList("produtos"));
+				System.out.println(String.format("Os seguintes produtos não estão atribuídos a prateleiras: %s", Arrays.toString(unassignedProducts)));
 				System.out.println(
 						"Por favor indique a ID do produto presente na prateleira (escolha de entre a lista de produtos):");
-				String text = "Lista de produtos:\n";
-				if (!productList.isEmpty()) {
-					for (int ID : productList.keySet()) {
-						text += productList.get(ID).toString();
-					}
-				} else {
-					text += "Vazia!\n";
-				}
-				System.out.println(text);
-				productID = Utils.validate(scanner, text, "product");
+				productID = Utils.validate(scanner, productList.getList("produtos"), "product");
 				if (productID == null) {
 					productID = 0;
 				}
@@ -360,7 +354,7 @@ public class TextInterface {
 				} else {
 					Integer shelfProductID = null;
 					if (!productList.isEmpty()) {
-						System.out.println(productList.getList("product"));
+						System.out.println(productList.getList("produtos"));
 						System.out.println(String.format("Esta prateleira contém o seguinte produto: %d\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", ((Shelf) shelfList.get(shelfID)).getProductID()));
 						shelfProductID = Utils.validate(scanner, productList.getList("product"), "product");
 						if(shelfProductID==null){

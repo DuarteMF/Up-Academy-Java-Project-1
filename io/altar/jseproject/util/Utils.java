@@ -102,6 +102,9 @@ public abstract class Utils {
 					}
 					if(validate(integerArray, emptyShelves)){
 						return integerArray;
+					}else{
+						System.out.println("Por favor escolha uma opção válida!");
+						System.out.println(text);
 					}
 				} catch (NumberFormatException e) {
 					System.out.println("Por favor escolha uma opção válida!");
@@ -113,7 +116,8 @@ public abstract class Utils {
 		}
 	}
 
-	public static Integer[] emptyShelves(ShelfRepository shelfList) {
+	public static Integer[] emptyShelves() {
+		ShelfRepository shelfList = ShelfRepository.getInstance();
 		ArrayList<Integer> List = new ArrayList<>();
 		for (Integer id : shelfList.keySet()) {
 			if (((Shelf) shelfList.get(id)).getProductID() == null) {
@@ -125,6 +129,19 @@ public abstract class Utils {
 		return emptyList;
 	}
 
+	public static Integer[] unassignedProducts(){
+		ProductRepository productList = ProductRepository.getInstance();
+		ArrayList<Integer> List = new ArrayList<>();
+		for (Integer id : productList.keySet()) {
+			if (((Product) productList.get(id)).getShelfIdLocation() == null) {
+				List.add(id);
+			}
+		}
+		Integer[] emptyList = new Integer[List.size()];
+		List.toArray(emptyList);
+		return emptyList;
+	}
+	
 	public static boolean validate(Integer[] array1, Integer[] parentArray) {
 		boolean exitWhile = false;
 		if (array1 != null && parentArray != null) {
@@ -140,13 +157,37 @@ public abstract class Utils {
 				exitWhile = !existsInParent;
 				i++;
 			}
-		}
-		if(exitWhile){
-			return false;
+			if(exitWhile){
+				return false;
+			}else{
+				return true;
+			}
 		}else{
-			return true;
+			return false;
 		}
+		
 		
 	}
 
+	public static Integer validate(Scanner scanner, String entityList, Integer[] currentUnassignedProducts){
+		Integer inputValue = null;
+		while (true) {
+			String input = scanner.nextLine();
+			if (!input.isEmpty()) {
+				try {
+					inputValue = Integer.parseInt(input);
+					if(validate()){
+						
+					}
+					return inputValue;
+				} catch (NumberFormatException e) {
+					System.out.println("Por favor escolha uma opção válida!");
+					System.out.println(entityList);
+				}
+			} else {
+				return null;
+			}
+		}
+	}
+	
 }
