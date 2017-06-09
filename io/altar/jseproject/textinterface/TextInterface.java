@@ -322,21 +322,22 @@ public class TextInterface {
 
 			Integer productID = null;
 			Integer[] unassignedProducts = Utils.unassignedProducts();
-			if (!productList.keySet().isEmpty() && unassignedProducts.length != 0) {
+			if (!productList.keySet().isEmpty()) {
+//			if (!productList.keySet().isEmpty() && unassignedProducts.length != 0) {
 				System.out.println(productList.getList("produtos"));
 				System.out.println(String.format("Os seguintes produtos não estão atribuídos a prateleiras: %s", Arrays.toString(unassignedProducts)));
 				System.out.println(
 						"Por favor indique a ID do produto presente na prateleira (escolha de entre a lista de produtos):");
-				productID = Utils.validate(scanner, productList.getList("produtos"), "product");
-				if (productID == null) {
-					productID = 0;
-				}
+				productID = Utils.validate(scanner, productList.getList("produtos"), productList.keySet());
 			}
 
 			System.out.println("Por favor indique o Preço de Aluguer da prateleira:");
 			Double locationRentalPrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
-			new Shelf(location, capacity, productID, locationRentalPrice);
+			Shelf newShelf = new Shelf(location, capacity, productID, locationRentalPrice);
+			if(productID!=null){
+				ProductRepository.addShelfLocation(productID, newShelf.getId());
+			}
 
 			listShelfScreen();
 		}
@@ -355,15 +356,14 @@ public class TextInterface {
 					Integer shelfProductID = null;
 					if (!productList.isEmpty()) {
 						System.out.println(productList.getList("produtos"));
-						System.out.println(String.format("Esta prateleira contém o seguinte produto: %d\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se nào inserir nada, este será apagado):", ((Shelf) shelfList.get(shelfID)).getProductID()));
-						shelfProductID = Utils.validate(scanner, productList.getList("product"), "product");
-						if(shelfProductID==null){
-							shelfProductID = ((Shelf) shelfList.get(shelfID)).getProductID();
+						System.out.println(String.format("Esta prateleira contém o seguinte produto: %d\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", ((Shelf) shelfList.get(shelfID)).getProductID()));
+						shelfProductID = Utils.validate(scanner, productList.getList("product"), productList.keySet());
+						if(shelfProductID!=null){
+							ProductRepository.alterShelfLocation(shelfProductID, shelfID, shelfID);
+						}else{
+							ProductRepository.alterShelfLocation(((Shelf) shelfList.get(shelfID)).getProductID(), shelfID, null);
 						}
 					}
-					
-					
-					System.out.println("Esta prateleira contém os seguintes produtos: ");
 
 					System.out.println(String.format(
 							"Esta prateleira tem a seguinte localização: %d\nInsira o novo valor para este parâmetro (se não inserir nada o valor corrente será mantido):",
@@ -392,7 +392,7 @@ public class TextInterface {
 						newLocationRentalPrice = Double.parseDouble(locationRentalPrice);
 					}
 
-					ShelfRepository.alterElement(shelfID, newLocation, newCapacity, newLocationRentalPrice);
+					ShelfRepository.alterElement(shelfID, newLocation, newCapacity, shelfProductID, newLocationRentalPrice);
 
 					listShelfScreen();
 				}

@@ -3,6 +3,7 @@ package io.altar.jseproject.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.Set;
 
 import io.altar.jseproject.model.Entity;
 import io.altar.jseproject.model.Product;
@@ -167,25 +168,25 @@ public abstract class Utils {
 		}
 	}
 	
-	public static boolean validate(Integer number, Integer[] parentArray) {
-		boolean existsInParent = false;
-		for (int j = 0; j < parentArray.length; j++) {
-			if (number == parentArray[j]) {
-				existsInParent = true;
-				break;
-			}
-		}
-		return existsInParent;
-	}
+//	public static boolean validate(Integer number, Integer[] parentArray) {
+//		boolean existsInParent = false;
+//		for (int j = 0; j < parentArray.length; j++) {
+//			if (number == parentArray[j]) {
+//				existsInParent = true;
+//				break;
+//			}
+//		}
+//		return existsInParent;
+//	}
 
-	public static Integer validate(Scanner scanner, String entityList, Integer[] currentUnassignedProducts){
+	public static Integer validate(Scanner scanner, String entityList, Set<Integer> Products){
 		Integer inputValue = null;
 		while (true) {
 			String input = scanner.nextLine();
 			if (!input.isEmpty()) {
 				try {
 					inputValue = Integer.parseInt(input);
-					if(validate(inputValue,currentUnassignedProducts)){
+					if(Products.contains(inputValue)){
 						return inputValue;
 					}else{
 						System.out.println("Por favor escolha uma opção válida!");

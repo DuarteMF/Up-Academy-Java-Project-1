@@ -11,9 +11,10 @@ public class ShelfRepository extends EntityRepository<Shelf> {
 		return INSTANCE;
 	}
 
-	public static void alterElement(Integer id, Integer location, Integer capacity, Double price) {
+	public static void alterElement(Integer id, Integer location, Integer capacity, Integer productID, Double price) {
 		((Shelf)ShelfRepository.getInstance().get(id)).setLocation(location);
 		((Shelf)ShelfRepository.getInstance().get(id)).setCapacity(capacity);
+		((Shelf)ShelfRepository.getInstance().get(id)).setProductID(productID);
 		((Shelf)ShelfRepository.getInstance().get(id)).setLocationRentalPrice(price);
 	}
 	
