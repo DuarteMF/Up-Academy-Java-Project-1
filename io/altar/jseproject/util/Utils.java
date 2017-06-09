@@ -165,8 +165,17 @@ public abstract class Utils {
 		}else{
 			return false;
 		}
-		
-		
+	}
+	
+	public static boolean validate(Integer number, Integer[] parentArray) {
+		boolean existsInParent = false;
+		for (int j = 0; j < parentArray.length; j++) {
+			if (number == parentArray[j]) {
+				existsInParent = true;
+				break;
+			}
+		}
+		return existsInParent;
 	}
 
 	public static Integer validate(Scanner scanner, String entityList, Integer[] currentUnassignedProducts){
@@ -176,10 +185,12 @@ public abstract class Utils {
 			if (!input.isEmpty()) {
 				try {
 					inputValue = Integer.parseInt(input);
-					if(validate()){
-						
+					if(validate(inputValue,currentUnassignedProducts)){
+						return inputValue;
+					}else{
+						System.out.println("Por favor escolha uma opção válida!");
+						System.out.println(entityList);
 					}
-					return inputValue;
 				} catch (NumberFormatException e) {
 					System.out.println("Por favor escolha uma opção válida!");
 					System.out.println(entityList);
