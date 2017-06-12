@@ -47,7 +47,7 @@ public class ProductRepository extends EntityRepository<Product> {
 			temp.add(newShelfLocation);			
 		}
 		Integer[] newShelfList = temp.toArray(new Integer[temp.size()]);
-		newShelfList = Arrays.sort(newShelfList);
+		Arrays.sort(newShelfList);
 		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newShelfList);
 	}
 }
