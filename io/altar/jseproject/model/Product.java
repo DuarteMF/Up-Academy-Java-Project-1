@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import io.altar.jseproject.repository.ProductRepository;
 
 public class Product extends Entity{
-	private ArrayList<Integer> shelfIdLocation;
+	private ArrayList<Integer> shelfIdLocation = new ArrayList<>();
 	private String name;
 	private Integer discount;
 	private Integer tax;
@@ -62,7 +62,11 @@ public class Product extends Entity{
 	
 	@Override
 	public String toString(){
-		return String.format("| ID: %d | Nome: %s | Prateleiras: %s | Desconto: %d%% | IVA: %d%% | PVP: %.2f€ |\n", getId(), name, shelfIdLocation.toString(), discount, tax, salePrice);
+		String shelfString = null;
+		if(!(shelfIdLocation==null)){
+			shelfString = shelfIdLocation.toString();
+		}
+		return String.format("| ID: %d | Nome: %s | Prateleiras: %s | Desconto: %d%% | IVA: %d%% | PVP: %.2f€ |\n", getId(), name, shelfString, discount, tax, salePrice);
 	}
 	
 }

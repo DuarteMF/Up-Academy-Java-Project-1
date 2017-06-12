@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import io.altar.jseproject.model.Product;
+import io.altar.jseproject.model.Shelf;
 
 public class ProductRepository extends EntityRepository<Product> {
 	private static final ProductRepository INSTANCE = new ProductRepository();
@@ -32,13 +33,27 @@ public class ProductRepository extends EntityRepository<Product> {
 	
 	
 	public static void alterShelfLocation(Integer productId, Integer editedShelfId, Integer newShelfLocation) {
-		ArrayList<Integer> oldShelfList = ((Product) ProductRepository.getInstance().get(productId)).getShelfIdLocation();
-		oldShelfList.remove(editedShelfId);
-		if(newShelfLocation!=null){
-			oldShelfList.add(newShelfLocation);			
+		Integer oldProductId = ((Shelf)ShelfRepository.getInstance().get(editedShelfId)).getProductID();
+		if(oldProductId!=null){
+			ArrayList<Integer> oldProductShelfList = ((Product)ProductRepository.getInstance().get(oldProductId)).getShelfIdLocation();
+			oldProductShelfList.remove(editedShelfId);
+			((Product)ProductRepository.getInstance().get(oldProductId)).setShelfIdLocation(oldProductShelfList);
 		}
-		Collections.sort(oldShelfList);
-		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(oldShelfList);
+		
+		ArrayList<Integer> newProductShelfList = ((Product)ProductRepository.getInstance().get(productId)).getShelfIdLocation();
+		if(newShelfLocation!=null){
+			newProductShelfList.add(newShelfLocation);
+			Collections.sort(newProductShelfList);
+			((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newProductShelfList);
+		}
+		
+//		ArrayList<Integer> oldShelfList = ((Product) ProductRepository.getInstance().get(productId)).getShelfIdLocation();
+//		oldShelfList.remove(editedShelfId);
+//		if(newShelfLocation!=null){
+//			oldShelfList.add(newShelfLocation);			
+//		}
+//		Collections.sort(oldShelfList);
+//		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(oldShelfList);
 	}
 }
 
