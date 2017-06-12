@@ -1,6 +1,7 @@
 package io.altar.jseproject.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.Set;
@@ -91,7 +92,7 @@ public abstract class Utils {
 	 * System.out.println("Por favor escolha uma opção válida!"); } } }
 	 */
 
-	public static Integer[] validateIntArray(Scanner scanner, String text, Integer[] emptyShelves) {
+	public static ArrayList<Integer> validateIntArray(Scanner scanner, String text, Integer[] emptyShelves) {
 		while (true) {
 			String input = scanner.nextLine();
 			if (!input.isEmpty()) {
@@ -102,7 +103,7 @@ public abstract class Utils {
 						integerArray[i] = Integer.parseInt(inputArray[i]);
 					}
 					if(validate(integerArray, emptyShelves)){
-						return integerArray;
+						return new ArrayList<>(Arrays.asList(integerArray));
 					}else{
 						System.out.println("Por favor escolha uma opção válida!");
 						System.out.println(text);

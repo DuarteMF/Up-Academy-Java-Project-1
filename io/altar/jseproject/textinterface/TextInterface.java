@@ -1,5 +1,6 @@
 package io.altar.jseproject.textinterface;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -125,7 +126,7 @@ public class TextInterface {
 	public static void createProduct() {
 		boolean correctVAT = false;
 		try (Scanner scanner = new Scanner(System.in)) {
-			Integer[] shelfIDArray = null;
+			ArrayList<Integer> shelfIDArray = null;
 			Integer[] emptyShelves = Utils.emptyShelves();
 			if (!shelfList.keySet().isEmpty() && emptyShelves.length != 0) {
 				System.out.println(shelfList.getList("shelf"));
@@ -181,15 +182,15 @@ public class TextInterface {
 				if (productID == 0) {
 					listProductScreen();
 				} else {
-					Integer[] shelfIDArray = null;
+					ArrayList<Integer> shelfIDArray = null;
 					Integer[] emptyShelves = Utils.emptyShelves();
 					if (!shelfList.isEmpty()) {
 						System.out.println(shelfList.getList("shelf"));
 						System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
-						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", Arrays.toString(((Product) productList.get(productID)).getShelfIdLocation())));
+						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", ((Product) productList.get(productID)).getShelfIdLocation().toString()));
 						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
 						if(shelfIDArray==null){
-							Integer[] tempShelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
+							ArrayList<Integer> tempShelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
 							for(Integer shelfID: tempShelfIDArray){
 								ShelfRepository.toggleProductPresent(shelfID, productID);
 							}

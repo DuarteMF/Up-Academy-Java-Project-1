@@ -1,17 +1,17 @@
 package io.altar.jseproject.model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import io.altar.jseproject.repository.ProductRepository;
 
 public class Product extends Entity{
-	private Integer [] shelfIdLocation;
+	private ArrayList<Integer> shelfIdLocation;
 	private String name;
 	private Integer discount;
 	private Integer tax;
 	private Double salePrice;	
 	
-	public void setShelfIdLocation(Integer [] shelfIdLocation){
+	public void setShelfIdLocation(ArrayList<Integer> shelfIdLocation){
 		this.shelfIdLocation = shelfIdLocation;
 	}
 	
@@ -31,7 +31,7 @@ public class Product extends Entity{
 		this.salePrice = salePrice;
 	}
 	
-	public Integer[] getShelfIdLocation(){
+	public ArrayList<Integer> getShelfIdLocation(){
 		return this.shelfIdLocation;
 	}
 	
@@ -51,7 +51,7 @@ public class Product extends Entity{
 		return this.salePrice;
 	}
 	
-	public Product(Integer[] shelfIdLocation, String name, Integer discount, Integer tax, Double salePrice){
+	public Product(ArrayList<Integer> shelfIdLocation, String name, Integer discount, Integer tax, Double salePrice){
 		this.shelfIdLocation = shelfIdLocation;
 		this.name = name;
 		this.discount = discount;
@@ -62,7 +62,7 @@ public class Product extends Entity{
 	
 	@Override
 	public String toString(){
-		return String.format("| ID: %d | Nome: %s | Prateleiras: %s | Desconto: %d%% | IVA: %d%% | PVP: %.2f€ |\n", getId(), name, Arrays.toString(shelfIdLocation), discount, tax, salePrice);
+		return String.format("| ID: %d | Nome: %s | Prateleiras: %s | Desconto: %d%% | IVA: %d%% | PVP: %.2f€ |\n", getId(), name, shelfIdLocation.toString(), discount, tax, salePrice);
 	}
 	
 }

@@ -1,10 +1,7 @@
 package io.altar.jseproject.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import io.altar.jseproject.model.Product;
 
@@ -17,7 +14,7 @@ public class ProductRepository extends EntityRepository<Product> {
 		return INSTANCE;
 	}
 
-	public static void alterElement(Integer id, Integer[] shelf, String name, Integer discount, Integer tax, Double price) {
+	public static void alterElement(Integer id, ArrayList<Integer> shelf, String name, Integer discount, Integer tax, Double price) {
 		((Product)ProductRepository.getInstance().get(id)).setShelfIdLocation(shelf);
 		((Product)ProductRepository.getInstance().get(id)).setName(name);		
 		((Product)ProductRepository.getInstance().get(id)).setDiscount(discount);
@@ -26,29 +23,22 @@ public class ProductRepository extends EntityRepository<Product> {
 	}
 	
 	public static void addShelfLocation(Integer id, Integer shelfLocation) {
-		Integer[] currentShelfLocation = ((Product)ProductRepository.getInstance().get(id)).getShelfIdLocation();
-		Integer[] newShelfLocation = {shelfLocation};
+		ArrayList<Integer> currentShelfLocation = ((Product)ProductRepository.getInstance().get(id)).getShelfIdLocation();
 		if(currentShelfLocation != null){
-			ArrayList<Integer> temp = (ArrayList<Integer>) Arrays.asList(currentShelfLocation);
-			temp.add(shelfLocation);
-//			Integer[] newShelfLocation = new Integer[temp.size()];
-			newShelfLocation = temp.toArray(newShelfLocation);
+			currentShelfLocation.add(shelfLocation);
 		}		
-		((Product)ProductRepository.getInstance().get(id)).setShelfIdLocation(newShelfLocation);
+		((Product)ProductRepository.getInstance().get(id)).setShelfIdLocation(currentShelfLocation);
 	}
 	
 	
 	public static void alterShelfLocation(Integer productId, Integer editedShelfId, Integer newShelfLocation) {
-		Integer[] oldShelfList = ((Product) ProductRepository.getInstance().get(productId)).getShelfIdLocation();
-		Set<Integer> temp = new HashSet<>();
-		Collections.addAll(temp, oldShelfList);
-		temp.remove(editedShelfId);
+		ArrayList<Integer> oldShelfList = ((Product) ProductRepository.getInstance().get(productId)).getShelfIdLocation();
+		oldShelfList.remove(editedShelfId);
 		if(newShelfLocation!=null){
-			temp.add(newShelfLocation);			
+			oldShelfList.add(newShelfLocation);			
 		}
-		Integer[] newShelfList = temp.toArray(new Integer[temp.size()]);
-		Arrays.sort(newShelfList);
-		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newShelfList);
+		Collections.sort(oldShelfList);
+		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(oldShelfList);
 	}
 }
 
