@@ -30,27 +30,7 @@ public class ProductRepository extends EntityRepository<Product> {
 		((Product)ProductRepository.getInstance().get(id)).setShelfIdLocation(currentShelfLocation);
 	}
 	
-	
-//	public static void alterShelfLocation(Integer productId, Integer editedShelfId, Integer newShelfLocation) {
-//		Integer oldProductId = ((Shelf)ShelfRepository.getInstance().get(editedShelfId)).getProductID();
-//		if(oldProductId!=null){
-//			ArrayList<Integer> oldProductShelfList = ((Product)ProductRepository.getInstance().get(oldProductId)).getShelfIdLocation();
-//			oldProductShelfList.remove(editedShelfId);
-//			((Product)ProductRepository.getInstance().get(oldProductId)).setShelfIdLocation(oldProductShelfList);
-//		}
-//		
-//		ArrayList<Integer> newProductShelfList = ((Product)ProductRepository.getInstance().get(productId)).getShelfIdLocation();
-//		if(newShelfLocation!=null){
-//			newProductShelfList.add(newShelfLocation);
-//			Collections.sort(newProductShelfList);
-//			((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newProductShelfList);
-//		}
-//	}
-	
 	public static void alterShelfLocation(Integer shelfOldProductId, Integer shelfNewProductfId, Integer shelfId) {
-		System.out.println(shelfOldProductId);
-		System.out.println(((Product) ProductRepository.getInstance()
-				.get(shelfOldProductId)).getShelfIdLocation().isEmpty());
 		if(shelfOldProductId!=shelfNewProductfId){
 			if (shelfOldProductId != null) {
 				ArrayList<Integer> oldProductShelfList = ((Product) ProductRepository.getInstance()
@@ -60,9 +40,6 @@ public class ProductRepository extends EntityRepository<Product> {
 						.setShelfIdLocation(oldProductShelfList);
 			}
 
-		System.out.println(shelfNewProductfId);
-		System.out.println(((Product) ProductRepository.getInstance()
-				.get(shelfOldProductId)).getShelfIdLocation().isEmpty());
 			if (shelfNewProductfId != null) {
 			ArrayList<Integer> newProductShelfList = ((Product) ProductRepository.getInstance().get(shelfNewProductfId))
 					.getShelfIdLocation();
