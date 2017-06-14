@@ -135,7 +135,7 @@ public abstract class Utils {
 		ProductRepository productList = ProductRepository.getInstance();
 		ArrayList<Integer> List = new ArrayList<>();
 		for (Integer id : productList.keySet()) {
-			if (((Product) productList.get(id)).getShelfIdLocation() == null) {
+			if (((Product) productList.get(id)).getShelfIdLocation().isEmpty()) {
 				List.add(id);
 			}
 		}

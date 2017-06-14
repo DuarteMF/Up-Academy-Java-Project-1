@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import io.altar.jseproject.model.Product;
-import io.altar.jseproject.model.Shelf;
 
 public class ProductRepository extends EntityRepository<Product> {
 	private static final ProductRepository INSTANCE = new ProductRepository();
@@ -32,28 +31,47 @@ public class ProductRepository extends EntityRepository<Product> {
 	}
 	
 	
-	public static void alterShelfLocation(Integer productId, Integer editedShelfId, Integer newShelfLocation) {
-		Integer oldProductId = ((Shelf)ShelfRepository.getInstance().get(editedShelfId)).getProductID();
-		if(oldProductId!=null){
-			ArrayList<Integer> oldProductShelfList = ((Product)ProductRepository.getInstance().get(oldProductId)).getShelfIdLocation();
-			oldProductShelfList.remove(editedShelfId);
-			((Product)ProductRepository.getInstance().get(oldProductId)).setShelfIdLocation(oldProductShelfList);
-		}
-		
-		ArrayList<Integer> newProductShelfList = ((Product)ProductRepository.getInstance().get(productId)).getShelfIdLocation();
-		if(newShelfLocation!=null){
-			newProductShelfList.add(newShelfLocation);
-			Collections.sort(newProductShelfList);
-			((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newProductShelfList);
-		}
-		
-//		ArrayList<Integer> oldShelfList = ((Product) ProductRepository.getInstance().get(productId)).getShelfIdLocation();
-//		oldShelfList.remove(editedShelfId);
-//		if(newShelfLocation!=null){
-//			oldShelfList.add(newShelfLocation);			
+//	public static void alterShelfLocation(Integer productId, Integer editedShelfId, Integer newShelfLocation) {
+//		Integer oldProductId = ((Shelf)ShelfRepository.getInstance().get(editedShelfId)).getProductID();
+//		if(oldProductId!=null){
+//			ArrayList<Integer> oldProductShelfList = ((Product)ProductRepository.getInstance().get(oldProductId)).getShelfIdLocation();
+//			oldProductShelfList.remove(editedShelfId);
+//			((Product)ProductRepository.getInstance().get(oldProductId)).setShelfIdLocation(oldProductShelfList);
 //		}
-//		Collections.sort(oldShelfList);
-//		((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(oldShelfList);
+//		
+//		ArrayList<Integer> newProductShelfList = ((Product)ProductRepository.getInstance().get(productId)).getShelfIdLocation();
+//		if(newShelfLocation!=null){
+//			newProductShelfList.add(newShelfLocation);
+//			Collections.sort(newProductShelfList);
+//			((Product)ProductRepository.getInstance().get(productId)).setShelfIdLocation(newProductShelfList);
+//		}
+//	}
+	
+	public static void alterShelfLocation(Integer shelfOldProductId, Integer shelfNewProductfId, Integer shelfId) {
+		System.out.println(shelfOldProductId);
+		System.out.println(((Product) ProductRepository.getInstance()
+				.get(shelfOldProductId)).getShelfIdLocation().isEmpty());
+		if(shelfOldProductId!=shelfNewProductfId){
+			if (shelfOldProductId != null) {
+				ArrayList<Integer> oldProductShelfList = ((Product) ProductRepository.getInstance()
+						.get(shelfOldProductId)).getShelfIdLocation();
+				oldProductShelfList.remove(shelfId);
+				((Product) ProductRepository.getInstance().get(shelfOldProductId))
+						.setShelfIdLocation(oldProductShelfList);
+			}
+
+		System.out.println(shelfNewProductfId);
+		System.out.println(((Product) ProductRepository.getInstance()
+				.get(shelfOldProductId)).getShelfIdLocation().isEmpty());
+			if (shelfNewProductfId != null) {
+			ArrayList<Integer> newProductShelfList = ((Product) ProductRepository.getInstance().get(shelfNewProductfId))
+					.getShelfIdLocation();
+				newProductShelfList.add(shelfId);
+				Collections.sort(newProductShelfList);
+				((Product) ProductRepository.getInstance().get(shelfNewProductfId))
+						.setShelfIdLocation(newProductShelfList);
+			}
+		}
 	}
 }
 

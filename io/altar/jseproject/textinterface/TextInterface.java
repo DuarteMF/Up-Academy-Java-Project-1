@@ -126,14 +126,17 @@ public class TextInterface {
 	public static void createProduct() {
 		boolean correctVAT = false;
 		try (Scanner scanner = new Scanner(System.in)) {
-			ArrayList<Integer> shelfIDArray = null;
+			ArrayList<Integer> shelfIDArray = new ArrayList<Integer>();
 			Integer[] emptyShelves = Utils.emptyShelves();
 			if (!shelfList.keySet().isEmpty() && emptyShelves.length != 0) {
-				System.out.println(shelfList.getList("shelf"));
+				System.out.println(shelfList.getList("prateleiras"));
 				System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
 				System.out.println(
 						"Por favor indique a lista de prateleiras em que o produto está exposto, separado por virgulas (pode deixar em branco):");
-				shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
+				shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("prateleiras"), emptyShelves);
+				if(shelfIDArray==null){
+					shelfIDArray = new ArrayList<Integer>();
+				}
 			}
 			
 			System.out.println("Por favor indique o nome do produto:");
@@ -159,7 +162,7 @@ public class TextInterface {
 			Double salePrice = Double.parseDouble(Utils.validate(scanner, false, "double"));
 
 			Product newProduct = new Product(shelfIDArray, name, discount, valueAddedTax, salePrice);
-			if(shelfIDArray!=null){
+			if(!shelfIDArray.isEmpty()){
 				for (Integer shelfID : shelfIDArray) {
 					ShelfRepository.toggleProductPresent(shelfID, newProduct.getId());
 				}
@@ -182,14 +185,21 @@ public class TextInterface {
 				if (productID == 0) {
 					listProductScreen();
 				} else {
-					ArrayList<Integer> shelfIDArray = null;
+					ArrayList<Integer> shelfIDArray = new ArrayList<>();
 					Integer[] emptyShelves = Utils.emptyShelves();
 					if (!shelfList.isEmpty()) {
-						System.out.println(shelfList.getList("shelf"));
+						System.out.println(shelfList.getList("prateleiras"));
 						System.out.println(String.format("As seguintes prateleiras estão vazias: %s", Arrays.toString(emptyShelves)));
-						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", ((Product) productList.get(productID)).getShelfIdLocation().toString()));
-						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("shelf"), emptyShelves);
+						String productLocation = null;
+						if(!(((Product) productList.get(productID)).getShelfIdLocation()==null)){
+							productLocation = ((Product) productList.get(productID)).getShelfIdLocation().toString();
+						}
+						System.out.println(String.format("Este produto existe nas seguintes prateleiras: %s\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", productLocation));
+						shelfIDArray = Utils.validateIntArray(scanner, shelfList.getList("prateleiras"), emptyShelves);
 						if(shelfIDArray==null){
+							shelfIDArray = new ArrayList<Integer>();
+						}
+						if(shelfIDArray.isEmpty()){
 							ArrayList<Integer> tempShelfIDArray = ((Product) productList.get(productID)).getShelfIdLocation();
 							for(Integer shelfID: tempShelfIDArray){
 								ShelfRepository.toggleProductPresent(shelfID, productID);
@@ -358,12 +368,13 @@ public class TextInterface {
 					if (!productList.isEmpty()) {
 						System.out.println(productList.getList("produtos"));
 						System.out.println(String.format("Esta prateleira contém o seguinte produto: %d\nInsira o novo valor para este parâmetro (para manter o valor corrente terá de o inserir de novo, se não inserir nada, este será apagado):", ((Shelf) shelfList.get(shelfID)).getProductID()));
-						shelfProductID = Utils.validate(scanner, productList.getList("product"), productList.keySet());
-						if(shelfProductID!=null){
-							ProductRepository.alterShelfLocation(shelfProductID, shelfID, shelfID);
-						}else{
-							ProductRepository.alterShelfLocation(((Shelf) shelfList.get(shelfID)).getProductID(), shelfID, null);
-						}
+						shelfProductID = Utils.validate(scanner, productList.getList("produtos"), productList.keySet());
+						ProductRepository.alterShelfLocation(((Shelf) shelfList.get(shelfID)).getProductID(), shelfProductID, shelfID);
+//						if(shelfProductID!=null){
+//							ProductRepository.alterShelfLocation(shelfProductID, shelfID, shelfID);
+//						}else{
+//							ProductRepository.alterShelfLocation(((Shelf) shelfList.get(shelfID)).getProductID(), shelfID, null);
+//						}
 					}
 
 					System.out.println(String.format(
